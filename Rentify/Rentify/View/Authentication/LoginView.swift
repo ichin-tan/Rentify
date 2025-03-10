@@ -14,6 +14,7 @@ struct LoginView: View {
     @State private var strPassword: String = ""
     @State private var isRememberMe: Bool = false
     @State private var isGoToSignup: Bool = false
+    @State private var isGoToGuestMap: Bool = false
     private let arrRoleSelection: [String] = ["Landlord", "Tenant", "Guest"]
     
     var body: some View {
@@ -201,7 +202,7 @@ struct LoginView: View {
     
     var guestLoginButton: some View {
         Button {
-            // Code To Home
+            isGoToGuestMap = true
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -216,6 +217,9 @@ struct LoginView: View {
                     .font(.system(size: 20))
                     .fontWeight(.bold)
             }
+        }
+        .navigationDestination(isPresented: $isGoToGuestMap) {
+            GuestMapView()
         }
     }
 }
