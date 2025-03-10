@@ -16,6 +16,7 @@ struct GuestMapView: View {
     ))
     @State private var strSearch: String = ""
     @State private var showSeeDetailPopup: Bool = false
+    @State private var selectedAnnotationTitle: String? = nil
     @Environment(\.presentationMode) var presentationMode
 
     let annotationsCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16), CLLocationCoordinate2D(latitude: 33.01, longitude: -116.16)]
@@ -82,6 +83,7 @@ struct GuestMapView: View {
                         ForEach(self.annotationsCoordinates, id: \.self) { coordinate in
                             Annotation("PRO", coordinate: coordinate){
                                 Button(action: {
+                                    selectedAnnotationTitle = String(coordinate.latitude) + " & " + String(coordinate.longitude)
                                     showSeeDetailPopup = true
                                 }) {
                                     ZStack {
@@ -97,6 +99,18 @@ struct GuestMapView: View {
                     .cornerRadius(10)
                     .padding(1)
                     .mapStyle(.hybrid(elevation: .realistic, pointsOfInterest: .all))
+                    
+                    if showSeeDetailPopup, let title = self.selectedAnnotationTitle {
+                        Color.black.opacity(0.7)
+                            .cornerRadius(10)
+                            .onTapGesture {
+                                showSeeDetailPopup = false
+                            }
+                        
+                        SeeDetailPopUpView(annotationTitle: title) {
+                            showSeeDetailPopup = false
+                        }
+                    }
                 }
                 
                 VStack(spacing: 10) {
@@ -156,43 +170,6 @@ struct GuestMapView: View {
         .navigationBarHidden(true)
     }
 }
-
-struct CustomPopupView: View {
-    var coordinate: CLLocationCoordinate2D
-    var onSeeDetails: () -> Void
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Annotation Details")
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            Text("Latitude: \(coordinate.latitude)")
-                .font(.subheadline)
-            
-            Text("Longitude: \(coordinate.longitude)")
-                .font(.subheadline)
-            
-            Button(action: {
-                onSeeDetails()
-            }) {
-                Text("See Details")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(radius: 10)
-        .padding()
-    }
-}
-
 
 #Preview {
     GuestMapView()
