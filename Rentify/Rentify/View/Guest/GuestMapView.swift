@@ -81,7 +81,7 @@ struct GuestMapView: View {
                     Map(position: $cameraPosition) {
                         
                         ForEach(self.annotationsCoordinates, id: \.self) { coordinate in
-                            Annotation("PRO", coordinate: coordinate){
+                            Annotation("", coordinate: coordinate){
                                 Button(action: {
                                     selectedAnnotationTitle = String(coordinate.latitude) + " & " + String(coordinate.longitude)
                                     showSeeDetailPopup = true
@@ -107,7 +107,7 @@ struct GuestMapView: View {
                                 showSeeDetailPopup = false
                             }
                         
-                        SeeDetailPopUpView(annotationTitle: title) {
+                        SeeDetailPopUpView(forRole: .Guest, annotationTitle: title) {
                             showSeeDetailPopup = false
                         }
                     }

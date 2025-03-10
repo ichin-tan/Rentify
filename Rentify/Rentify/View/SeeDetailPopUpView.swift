@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SeeDetailPopUpView: View {
+    var forRole: Role
     var annotationTitle: String
-    
     var onSeeDetails: () -> Void
     
     var body: some View {
@@ -40,7 +40,7 @@ struct SeeDetailPopUpView: View {
 }
 
 #Preview {
-    SeeDetailPopUpView(annotationTitle: "YUOOP") {
+    SeeDetailPopUpView(forRole: .Guest, annotationTitle: "YUOOP") {
         print("Tapped on preview!")
     }
 }
