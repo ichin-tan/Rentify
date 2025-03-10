@@ -32,10 +32,11 @@ struct SeeDetailPopUpView: View {
             }
         }
         .padding()
+        .padding(.bottom, 5)
         .background(Color.appColumbiaBlue)
         .cornerRadius(15)
         .shadow(radius: 10)
-        .padding()
+        .padding(25)
     }
 }
 

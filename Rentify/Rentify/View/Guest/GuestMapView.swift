@@ -16,6 +16,7 @@ struct GuestMapView: View {
     ))
     @State private var strSearch: String = ""
     @State private var showSeeDetailPopup: Bool = false
+    @State private var goToPropertyDetail: Bool = false
     @State private var selectedAnnotationTitle: String? = nil
     @Environment(\.presentationMode) var presentationMode
 
@@ -109,6 +110,10 @@ struct GuestMapView: View {
                         
                         SeeDetailPopUpView(forRole: .Guest, annotationTitle: title) {
                             showSeeDetailPopup = false
+                            goToPropertyDetail = true
+                        }
+                        .navigationDestination(isPresented: $goToPropertyDetail) {
+                            GuestPropertyDetailView()
                         }
                     }
                 }
