@@ -101,6 +101,8 @@ struct LoginView: View {
             }
             .padding([.leading, .trailing], 20)
             .padding(.top, 5)
+            .autocorrectionDisabled()
+            .autocapitalization(.none)
     }
     
     var passwordTextField: some View {
@@ -115,6 +117,8 @@ struct LoginView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
+            .autocorrectionDisabled()
+            .autocapitalization(.none)
     }
     
     var rememberMeView: some View {

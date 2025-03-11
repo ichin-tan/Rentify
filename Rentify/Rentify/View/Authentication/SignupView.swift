@@ -13,6 +13,8 @@ struct SignupView: View {
     @State private var strEmail: String = ""
     @State private var strPassword: String = ""
     @State private var isRememberMe: Bool = false
+    @State private var isShowAlert: Bool = false
+    @State private var strAlertMessage: String = ""
     private let arrRoleSelection: [String] = ["Landlord", "Tenant"]
     @Environment(\.presentationMode) var presentationMode
     
@@ -56,6 +58,11 @@ struct SignupView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
+        .alert(isPresented: $isShowAlert) {
+            Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
+                print("Alert dismissed!")
+            }))
+        }
     }
     
     var roleView: some View {
@@ -102,6 +109,8 @@ struct SignupView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
+            .autocorrectionDisabled()
+            .autocapitalization(.none)
     }
     
     var passwordTextField: some View {
@@ -116,6 +125,8 @@ struct SignupView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
+            .autocorrectionDisabled()
+            .autocapitalization(.none)
     }
     
     var rememberMeView: some View {
@@ -185,7 +196,22 @@ struct SignupView: View {
             FirebaseManager.shared.signupWith(email: strEmail, password: strPassword) { result in
                 if(result) {
                     // have to create user
-                    print("User created successfully!")
+                    
+                    if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                        let user = User(id: currentUserId, email: strEmail, role: strRoleSelection)
+                        FirebaseManager.shared.createUser(user: user) { result in
+                            if(result) {
+                                print("User created successfully!")
+                            } else {
+                                strAlertMessage = "User could not be created!"
+                                isShowAlert = true
+                            }
+                        }
+                    } else {
+                        print("Authenticated user could not be found!")
+                        strAlertMessage = "User could not be created!"
+                        isShowAlert = true
+                    }
                 }
             }
         }
@@ -193,15 +219,23 @@ struct SignupView: View {
     
     private func isValidated() -> Bool {
         var isValidate = true
-        
         if(strEmail.isEmpty) {
             isValidate = false
+            strAlertMessage = "Email cannot be empty!"
+            isShowAlert = true
         } else if(!isValidEmail(strEmail)) {
             isValidate = false
+            strAlertMessage = "Email cannot be invalid!"
+            isShowAlert = true
         } else if(strPassword.isEmpty) {
             isValidate = false
+            strAlertMessage = "Password cannot be empty!"
+            isShowAlert = true
+        } else if(strPassword.count < 6) {
+            isValidate = false
+            strAlertMessage = "Password cannot be less than 6 characters!"
+            isShowAlert = true
         }
-        
         return isValidate
     }
 }

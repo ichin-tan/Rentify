@@ -20,3 +20,4 @@ func isValidEmail(_ email: String) -> Bool {
     return emailPred.evaluate(with: email)
 }
 
+let USER_COLLECTION = "Users"

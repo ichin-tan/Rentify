@@ -6,11 +6,13 @@
 //
 
 import FirebaseAuth
+import FirebaseFirestore
 
 class FirebaseManager {
     
     static let shared = FirebaseManager()
-    
+    private let db = Firestore.firestore()
+
     private init() {
         // Just to prevent that outside of this class, no one can make object of this class
     }
@@ -49,7 +51,22 @@ class FirebaseManager {
         }
     }
     
-    func createUser() {
-        
+    func getCurrentUserUIdFromFirebase() -> String? {
+        return Auth.auth().currentUser?.uid
+    }
+    
+    func createUser(user: User, completion: ((Bool) -> ())?) {
+        db.collection(USER_COLLECTION).document(user.id).setData([
+            "id": user.id,
+            "email": user.email,
+            "role": user.role
+        ]) { error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion?(false)
+            } else {
+                completion?(true)
+            }
+        }
     }
 }
