@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State private var strRoleSelection: String = "Landlord"
     @State private var strEmail: String = ""
     @State private var strPassword: String = ""
     @State private var isPasswordVisible: Bool = false
@@ -19,7 +18,6 @@ struct LoginView: View {
     @State private var isGoToGuestMap: Bool = false
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
-    private let arrRoleSelection: [String] = ["Landlord", "Tenant", "Guest"]
     
     var body: some View {
         
@@ -32,25 +30,20 @@ struct LoginView: View {
                     .font(.system(size: 30))
                     .foregroundColor(.appAliceBlue)
                     .fontWeight(.bold)
-                
-                roleView
-                
-                if(strRoleSelection == "Guest") {
-                    guestLoginButton
-                } else {
-                                        
-                    VStack(spacing: 15) {
-                        emailTextField
-                        passwordTextField
-                    }
-                    
-                    rememberMeView
-                    
-                    loginButton
-                    
-                    signupView
+                                
+                VStack(spacing: 15) {
+                    emailTextField
+                    passwordTextField
                 }
                 
+                rememberMeView
+                
+                loginButton
+                                    
+                signupView
+                
+                guestLoginButton
+
                 
                 Spacer()
                 
@@ -64,38 +57,7 @@ struct LoginView: View {
             }
         }
     }
-    
-    var roleView: some View {
-        HStack(spacing: 10) {
-            Text("Select Role ->")
-                .foregroundColor(.appGrayBlue)
-                .font(.system(size: 20))
-                .fontWeight(.medium)
-                        
-            Menu {
-                Picker("", selection: $strRoleSelection) {
-                    ForEach(self.arrRoleSelection, id: \.self) { roleOption in
-                        Text(roleOption)
-                    }
-                }
-            } label: {
-                Text(strRoleSelection)
-                    .font(.system(size: 15))
-                    .fontWeight(.medium)
-                    .foregroundColor(.appGrayBlue)
-                    .padding(10)
-                    .background(.appAliceBlue)
-                    .cornerRadius(10)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(.appGrayBlue, lineWidth: 1)
-                    }
-            }
-        }
-        .padding([.leading, .trailing], 20)
-        .padding(.top, 10)
-    }
-    
+        
     var emailTextField: some View {
         TextField("Email", text: $strEmail)
             .keyboardType(.emailAddress)
@@ -109,7 +71,7 @@ struct LoginView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 5)
+            .padding(.top, 20)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
