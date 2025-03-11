@@ -58,7 +58,9 @@ class FirebaseManager {
     func createUser(user: User, completion: ((Bool) -> ())?) {
         db.collection(USER_COLLECTION).document(user.id).setData([
             "id": user.id,
+            "name": user.name,
             "email": user.email,
+            "contact": user.contact,
             "role": user.role
         ]) { error in
             if let error = error {

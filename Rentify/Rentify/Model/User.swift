@@ -9,12 +9,16 @@ import Foundation
 
 class User {
     var id: String
+    var name: String
     var email: String
+    var contact: String
     var role: String
 
-    init(id: String, email: String, role: String) {
+    init(id: String, name: String, email: String, contact: String, role: String) {
         self.id = id
+        self.name = name
         self.email = email
+        self.contact = contact
         self.role = role
     }
 }

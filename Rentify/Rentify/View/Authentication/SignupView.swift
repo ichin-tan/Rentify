@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SignupView: View {
     
-    @State private var strRoleSelection: String = "Landlord"
+    @State private var selectedRole: Role = .Landlord
+    @State private var strName: String = ""
+    @State private var strContact: String = ""
     @State private var strEmail: String = ""
     @State private var strPassword: String = ""
     @State private var isPasswordVisible: Bool = false
@@ -17,7 +19,7 @@ struct SignupView: View {
     @State private var isRememberMe: Bool = false
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
-    private let arrRoleSelection: [String] = ["Landlord", "Tenant"]
+    private let arrRoleSelection: [Role] = [.Landlord, .Tenant]
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -46,7 +48,9 @@ struct SignupView: View {
             roleView
             
             VStack(spacing: 15) {
+                nameTextField
                 emailTextField
+                contactTextField
                 passwordTextField
             }
             
@@ -75,13 +79,13 @@ struct SignupView: View {
                 .fontWeight(.medium)
                         
             Menu {
-                Picker("", selection: $strRoleSelection) {
+                Picker("", selection: $selectedRole) {
                     ForEach(self.arrRoleSelection, id: \.self) { roleOption in
-                        Text(roleOption)
+                        Text(roleOption.rawValue.capitalized)
                     }
                 }
             } label: {
-                Text(strRoleSelection)
+                Text(selectedRole.rawValue.capitalized)
                     .font(.system(size: 15))
                     .fontWeight(.medium)
                     .foregroundColor(.appGrayBlue)
@@ -96,6 +100,23 @@ struct SignupView: View {
         }
         .padding([.leading, .trailing], 20)
         .padding(.top, 10)
+    }
+    
+    var nameTextField: some View {
+        TextField("Name", text: $strName)
+            .keyboardType(.default)
+            .font(.system(size: 20))
+            .foregroundColor(.appGrayBlue)
+            .padding(10)
+            .background(.appAliceBlue)
+            .cornerRadius(10)
+            .overlay {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.appGrayBlue, lineWidth: 1)
+            }
+            .padding([.leading, .trailing], 20)
+            .autocorrectionDisabled()
+            .autocapitalization(.none)
     }
     
     var emailTextField: some View {
@@ -114,6 +135,24 @@ struct SignupView: View {
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
+    
+    var contactTextField: some View {
+        TextField("Contact", text: $strContact)
+            .keyboardType(.numberPad)
+            .font(.system(size: 20))
+            .foregroundColor(.appGrayBlue)
+            .padding(10)
+            .background(.appAliceBlue)
+            .cornerRadius(10)
+            .overlay {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.appGrayBlue, lineWidth: 1)
+            }
+            .padding([.leading, .trailing], 20)
+            .autocorrectionDisabled()
+            .autocapitalization(.none)
+    }
+
     
     var passwordTextField: some View {
         Group {
@@ -227,10 +266,16 @@ struct SignupView: View {
                     // have to create user
                     
                     if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
-                        let user = User(id: currentUserId, email: strEmail, role: strRoleSelection)
+                        let user = User(id: currentUserId, name: strName, email: strEmail, contact: strContact, role: selectedRole.rawValue)
                         FirebaseManager.shared.createUser(user: user) { result in
                             if(result) {
                                 print("User created successfully!")
+                                self.crearFields()
+                                if user.role == Role.Landlord.rawValue {
+                                    // Go to Landlord home
+                                } else {
+                                    // Go to Tenant home
+                                }
                             } else {
                                 strAlertMessage = "User could not be created!"
                                 isShowAlert = true
@@ -248,13 +293,25 @@ struct SignupView: View {
     
     private func isValidated() -> Bool {
         var isValidate = true
-        if(strEmail.isEmpty) {
+        if(strName.isEmpty) {
+            isValidate = false
+            strAlertMessage = "Name cannot be empty!"
+            isShowAlert = true
+        } else if(strEmail.isEmpty) {
             isValidate = false
             strAlertMessage = "Email cannot be empty!"
             isShowAlert = true
         } else if(!isValidEmail(strEmail)) {
             isValidate = false
             strAlertMessage = "Email cannot be invalid!"
+            isShowAlert = true
+        } else if(strContact.isEmpty) {
+            isValidate = false
+            strAlertMessage = "Contact cannot be empty!"
+            isShowAlert = true
+        } else if(strContact.count != 10) {
+            isValidate = false
+            strAlertMessage = "Contact should be of 10 numbers!"
             isShowAlert = true
         } else if(strPassword.isEmpty) {
             isValidate = false
@@ -266,6 +323,16 @@ struct SignupView: View {
             isShowAlert = true
         }
         return isValidate
+    }
+    
+    private func crearFields() {
+        selectedRole = .Landlord
+        strName = ""
+        strEmail = ""
+        strContact = ""
+        strPassword = ""
+        isPasswordVisible = false
+        isPasswordFocused = false
     }
 }
 
