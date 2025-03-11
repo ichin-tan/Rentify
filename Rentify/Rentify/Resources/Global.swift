@@ -21,3 +21,22 @@ func isValidEmail(_ email: String) -> Bool {
 }
 
 let USER_COLLECTION = "Users"
+
+let UD = UserDefaults.standard
+var UD_KEY_CURRENT_USER = "CURRENT_USER"
+
+func getCurrentUserFromUD() -> User? {
+    if let udCurrentUserData = UD.data(forKey: UD_KEY_CURRENT_USER),
+       let currentUser = try? JSONDecoder().decode(User.self, from: udCurrentUserData) {
+        return currentUser
+    }
+    return nil
+}
+
+func saveCurrentUserInUD(user: User) {
+    if let udCurrentUserData = try? JSONEncoder().encode(user) {
+        UD.set(udCurrentUserData, forKey: UD_KEY_CURRENT_USER)
+    } else {
+        print("Coudn't save data to user defaults!")
+    }
+}

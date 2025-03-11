@@ -270,6 +270,7 @@ struct SignupView: View {
                         FirebaseManager.shared.createUser(user: user) { result in
                             if(result) {
                                 print("User created successfully!")
+                                saveCurrentUserInUD(user: user)
                                 self.crearFields()
                                 if user.role == Role.Landlord.rawValue {
                                     // Go to Landlord home
@@ -286,6 +287,9 @@ struct SignupView: View {
                         strAlertMessage = "User could not be created!"
                         isShowAlert = true
                     }
+                } else {
+                    strAlertMessage = "Something went wrong!"
+                    isShowAlert = true
                 }
             }
         }

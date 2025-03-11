@@ -71,4 +71,46 @@ class FirebaseManager {
             }
         }
     }
+    
+    func fetchUser(for userId: String, completion: ((User?) -> ())?) {
+                
+        db.collection(USER_COLLECTION)
+            .document(userId)
+            .addSnapshotListener { snapshot, error in
+                if let snapshot = snapshot {
+                    do {
+                        let user = try snapshot.data(as: User.self)
+                        completion?(user)
+                    } catch let error {
+                        print(error.localizedDescription)
+                        completion?(nil)
+                    }
+                }
+            }        
+    }
+    
+    
+//    func fetchPlants(completion: (([Plant]) -> ())?) {
+//        
+//        var arrToReturn : [Plant] = []
+//        
+//        db.collection(plantsCollection)
+//            .addSnapshotListener({ snapshot, error  in
+//                
+//                if let snapshot = snapshot {
+//                    for document in snapshot.documents {
+//                        do {
+//                            let plant = try document.data(as: Plant.self)
+//                            arrToReturn.append(plant)
+//                        } catch {
+//                            print("Error while fetching the plant")
+//                        }
+//                    }
+//                    
+//                    completion?(arrToReturn)
+//                }
+//            }
+//        )
+//    }
+
 }

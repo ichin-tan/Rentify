@@ -17,6 +17,8 @@ struct LoginView: View {
     @State private var isRememberMe: Bool = false
     @State private var isGoToSignup: Bool = false
     @State private var isGoToGuestMap: Bool = false
+    @State private var isShowAlert: Bool = false
+    @State private var strAlertMessage: String = ""
     private let arrRoleSelection: [String] = ["Landlord", "Tenant", "Guest"]
     
     var body: some View {
@@ -55,6 +57,11 @@ struct LoginView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.appColumbiaBlue)
+            .alert(isPresented: $isShowAlert) {
+                Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
+                    print("Alert dismissed!")
+                }))
+            }
         }
     }
     
@@ -195,6 +202,7 @@ struct LoginView: View {
     var loginButton: some View {
         Button {
             // Code To Login
+            login()
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -255,6 +263,68 @@ struct LoginView: View {
             GuestMapView()
         }
     }
+    
+    private func login() {
+        if(isValidated()) {
+            FirebaseManager.shared.loginWith(email: strEmail, password: strPassword) { result in
+                if result {
+                    if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                        FirebaseManager.shared.fetchUser(for: currentUserId) { user in
+                            if let user = user {
+                                saveCurrentUserInUD(user: user)
+                                self.crearFields()
+                                if user.role == Role.Landlord.rawValue {
+                                    // Go to Landlord home
+                                } else {
+                                    // Go to Tenant home
+                                }
+                            } else {
+                                strAlertMessage = "Something went wrong!"
+                                isShowAlert = true
+                            }
+                        }
+                    } else {
+                        print("Authenticated user could not be found!")
+                        strAlertMessage = "User could not be found!"
+                        isShowAlert = true
+                    }
+                } else {
+                    strAlertMessage = "Something went wrong!"
+                    isShowAlert = true
+                }
+            }
+        }
+    }
+    
+    private func isValidated() -> Bool {
+        var isValidate = true
+        if(strEmail.isEmpty) {
+            isValidate = false
+            strAlertMessage = "Email cannot be empty!"
+            isShowAlert = true
+        } else if(!isValidEmail(strEmail)) {
+            isValidate = false
+            strAlertMessage = "Email cannot be invalid!"
+            isShowAlert = true
+        } else if(strPassword.isEmpty) {
+            isValidate = false
+            strAlertMessage = "Password cannot be empty!"
+            isShowAlert = true
+        } else if(strPassword.count < 6) {
+            isValidate = false
+            strAlertMessage = "Password cannot be less than 6 characters!"
+            isShowAlert = true
+        }
+        return isValidate
+    }
+    
+    private func crearFields() {
+        strEmail = ""
+        strPassword = ""
+        isPasswordVisible = false
+        isPasswordFocused = false
+    }
+
 }
 
 #Preview {
