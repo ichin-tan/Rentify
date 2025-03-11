@@ -11,6 +11,10 @@ class FirebaseManager {
     
     static let shared = FirebaseManager()
     
+    private init() {
+        // Just to prevent that outside of this class, no one can make object of this class
+    }
+    
     //MARK: - GENERAL METHODS
     
     func signupWith(email: String, password: String, completion: ((Bool) -> ())?) {
@@ -45,7 +49,7 @@ class FirebaseManager {
         }
     }
     
-    func createLandlord() {
+    func createUser() {
         
     }
 }

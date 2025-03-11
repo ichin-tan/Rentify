@@ -184,6 +184,7 @@ struct SignupView: View {
         if(isValidated()) {
             FirebaseManager.shared.signupWith(email: strEmail, password: strPassword) { result in
                 if(result) {
+                    // have to create user
                     print("User created successfully!")
                 }
             }
