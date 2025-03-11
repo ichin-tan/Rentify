@@ -162,7 +162,7 @@ struct SignupView: View {
     
     var signupButton: some View {
         Button {
-            // Code To Signup
+            self.signUp()
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -178,6 +178,30 @@ struct SignupView: View {
                     .fontWeight(.bold)
             }
         }
+    }
+    
+    private func signUp() {
+        if(isValidated()) {
+            FirebaseManager.shared.signupWith(email: strEmail, password: strPassword) { result in
+                if(result) {
+                    print("User created successfully!")
+                }
+            }
+        }
+    }
+    
+    private func isValidated() -> Bool {
+        var isValidate = true
+        
+        if(strEmail.isEmpty) {
+            isValidate = false
+        } else if(!isValidEmail(strEmail)) {
+            isValidate = false
+        } else if(strPassword.isEmpty) {
+            isValidate = false
+        }
+        
+        return isValidate
     }
 }
 
