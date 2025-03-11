@@ -12,6 +12,8 @@ struct LoginView: View {
     @State private var strRoleSelection: String = "Landlord"
     @State private var strEmail: String = ""
     @State private var strPassword: String = ""
+    @State private var isPasswordVisible: Bool = false
+    @FocusState private var isPasswordFocused: Bool
     @State private var isRememberMe: Bool = false
     @State private var isGoToSignup: Bool = false
     @State private var isGoToGuestMap: Bool = false
@@ -106,8 +108,17 @@ struct LoginView: View {
     }
     
     var passwordTextField: some View {
-        TextField("Password", text: $strPassword)
-            .font(.system(size: 20))
+        Group {
+            if isPasswordVisible {
+                TextField("Password", text: $strPassword)
+                    .focused($isPasswordFocused)
+            } else {
+                SecureField("Password", text: $strPassword)
+                    .focused($isPasswordFocused)
+            }
+        }
+        .frame(height: 25)
+        .font(.system(size: 20))
             .foregroundColor(.appGrayBlue)
             .padding(10)
             .background(.appAliceBlue)
@@ -119,8 +130,26 @@ struct LoginView: View {
             .padding([.leading, .trailing], 20)
             .autocorrectionDisabled()
             .autocapitalization(.none)
+            .overlay(alignment: .trailing) {
+                Button {
+                    withAnimation {
+                        let wasFocused = isPasswordFocused
+                        isPasswordVisible.toggle()
+                        if wasFocused {
+                            DispatchQueue.main.async {
+                                isPasswordFocused = true
+                            }
+                        }
+                    }
+                } label: {
+                    Image(systemName: isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                        .padding(.trailing, 30)
+                        .foregroundColor(.appBlue)
+                        .fontWeight(.black)
+                }
+            }
     }
-    
+
     var rememberMeView: some View {
         HStack(spacing: 10) {
             Text("Remember Me")
