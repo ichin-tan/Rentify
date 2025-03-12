@@ -96,12 +96,9 @@ struct LandlordMapView: View {
                                 showSeeDetailPopup = false
                             }
                         
-                        SeeDetailPopUpView(forRole: .Guest, annotationTitle: title) {
+                        SeeDetailPopUpView(forRole: .Landlord, annotationTitle: title) {
                             showSeeDetailPopup = false
                             goToPropertyDetail = true
-                        }
-                        .navigationDestination(isPresented: $goToPropertyDetail) {
-                            GuestPropertyDetailView()
                         }
                     }
                 }
@@ -156,6 +153,9 @@ struct LandlordMapView: View {
             .padding(.top, 15)
             .padding(.bottom, 10)
             Spacer()
+        }
+        .navigationDestination(isPresented: $goToPropertyDetail) {
+            GuestPropertyDetailView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
