@@ -161,8 +161,8 @@ struct GuestMapView: View {
                             .clipShape(Circle())
                     }
                 }
-                .padding(.trailing, 30)
-                .padding(.bottom, 30)
+                .padding(.trailing, 20)
+                .padding(.bottom, 20)
             }
             .padding([.leading, .trailing], 20)
             .padding(.top, 15)
