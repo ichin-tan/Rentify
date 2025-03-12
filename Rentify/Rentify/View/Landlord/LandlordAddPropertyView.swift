@@ -44,6 +44,8 @@ struct LandlordAddPropertyView: View {
                 
                 rentField
                 
+                fetchCurrentLocationButton
+                
                 addPropertyButton
                 
                 Spacer()
@@ -88,7 +90,7 @@ struct LandlordAddPropertyView: View {
                         .stroke(.appGrayBlue, lineWidth: 1)
                 }
                 .padding([.leading, .trailing], 20)
-                .padding(.top, 10)
+                .padding(.top, 5)
         } placeholder: {
             RoundedRectangle(cornerRadius: 10)
                 .fill(.appAliceBlue)
@@ -98,7 +100,7 @@ struct LandlordAddPropertyView: View {
                         .stroke(.appGrayBlue, lineWidth: 1)
                 }
                 .padding([.leading, .trailing], 20)
-                .padding(.top, 10)
+                .padding(.top, 5)
                 .overlay {
                     ProgressView()
                 }
@@ -118,7 +120,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 10)
+            .padding(.top,5)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -136,7 +138,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 10)
+            .padding(.top,5)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -154,7 +156,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 10)
+            .padding(.top,5)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -173,7 +175,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 10)
+            .padding(.top,5)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -186,16 +188,35 @@ struct LandlordAddPropertyView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .frame(height: 50)
                     .padding([.leading, .trailing], 20)
-                    .padding(.top, 20)
                     .foregroundColor(.appBlue)
 
                 Text("ADD")
-                    .padding(.top, 20)
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
             }
         }
+        .padding(.top,15)
+    }
+    
+    var fetchCurrentLocationButton: some View {
+        Button {
+            
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(height: 50)
+                    .padding([.leading, .trailing], 20)
+                    .padding(.top, 0)
+                    .foregroundColor(.appBlue)
+
+                Text("FILL CURRENT ADDRESS")
+                    .foregroundColor(.appAliceBlue)
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+            }
+        }
+        .padding(.top,5)
     }
     
     private func isValidated() -> Bool {
