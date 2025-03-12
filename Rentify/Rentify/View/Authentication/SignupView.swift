@@ -104,6 +104,7 @@ struct SignupView: View {
     
     var nameTextField: some View {
         TextField("Name", text: $strName)
+            .frame(height: 25)
             .keyboardType(.default)
             .font(.system(size: 20))
             .foregroundColor(.appGrayBlue)
@@ -121,6 +122,7 @@ struct SignupView: View {
     
     var emailTextField: some View {
         TextField("Email", text: $strEmail)
+            .frame(height: 25)
             .keyboardType(.emailAddress)
             .font(.system(size: 20))
             .foregroundColor(.appGrayBlue)
@@ -138,6 +140,7 @@ struct SignupView: View {
     
     var contactTextField: some View {
         TextField("Contact", text: $strContact)
+            .frame(height: 25)
             .keyboardType(.numberPad)
             .font(.system(size: 20))
             .foregroundColor(.appGrayBlue)

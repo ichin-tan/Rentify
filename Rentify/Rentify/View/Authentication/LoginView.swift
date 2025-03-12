@@ -9,8 +9,8 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State private var strEmail: String = ""
-    @State private var strPassword: String = ""
+    @State private var strEmail: String = "chintan@gmail.com"
+    @State private var strPassword: String = "chintan@123"
     @State private var isPasswordVisible: Bool = false
     @FocusState private var isPasswordFocused: Bool
     @State private var isRememberMe: Bool = false
@@ -62,6 +62,7 @@ struct LoginView: View {
         
     var emailTextField: some View {
         TextField("Email", text: $strEmail)
+            .frame(height: 25)
             .keyboardType(.emailAddress)
             .font(.system(size: 20))
             .foregroundColor(.appGrayBlue)

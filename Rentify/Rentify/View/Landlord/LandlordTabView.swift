@@ -40,13 +40,13 @@ struct LandlordTabView: View {
         .onAppear {
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .appColumbiaBlue
+            appearance.backgroundColor = .appBlue
             
-            appearance.stackedLayoutAppearance.normal.iconColor = .appGrayBlue
-            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.appGrayBlue]
+            appearance.stackedLayoutAppearance.normal.iconColor = .appAliceBlue.withAlphaComponent(0.5)
+            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.appAliceBlue.withAlphaComponent(0.5)]
             
-            appearance.stackedLayoutAppearance.selected.iconColor = .appBlue
-            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.appBlue]
+            appearance.stackedLayoutAppearance.selected.iconColor = .appColumbiaBlue
+            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.appColumbiaBlue]
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = appearance
         }
