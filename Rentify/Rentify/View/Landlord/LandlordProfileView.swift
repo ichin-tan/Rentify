@@ -243,24 +243,26 @@ struct LandlordProfileView: View {
     }
     
     private func editProfile() {
-        print("Edit Profile Called")
         if(showEditFields == false) {
             showEditFields = true
         } else {
-            // Edit profile code
-            print("Code dome to edit profile")
             if(isValidated()) {
                 if let previousUser = viewModel.currentUser {
-                    let user = User(id: previousUser.id, name: strName, email: strEmail, contact: strContact, role: previousUser.role)
-                    FirebaseManager.shared.createOrUpdateUser(user: user) { success in
-                        if(success) {
-                            viewModel.currentUser = user
-                            showEditFields = false
-                            strAlertMessage = "User Updated!"
-                            isShowAlert = true
-                        } else {
-                            strAlertMessage = "Something went wrong!"
-                            isShowAlert = true
+                    
+                    if(previousUser.name == strName && previousUser.contact == strContact && previousUser.email == strEmail) {
+                        showEditFields = false
+                    } else {
+                        let user = User(id: previousUser.id, name: strName, email: strEmail, contact: strContact, role: previousUser.role)
+                        FirebaseManager.shared.createOrUpdateUser(user: user) { success in
+                            if(success) {
+                                viewModel.currentUser = user
+                                showEditFields = false
+                                strAlertMessage = "User Updated!"
+                                isShowAlert = true
+                            } else {
+                                strAlertMessage = "Something went wrong!"
+                                isShowAlert = true
+                            }
                         }
                     }
                 } else {
