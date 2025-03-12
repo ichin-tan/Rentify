@@ -42,6 +42,8 @@ struct LandlordAddPropertyView: View {
                 
                 rentField
                 
+                addPropertyButton
+                
                 Spacer()
             }
         }
@@ -81,10 +83,18 @@ struct LandlordAddPropertyView: View {
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 10)
         } placeholder: {
-            ProgressView()
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.appAliceBlue)
                 .frame(height: 200)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(.appGrayBlue, lineWidth: 1)
+                }
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 10)
+                .overlay {
+                    ProgressView()
+                }
         }
     }
     
@@ -160,7 +170,26 @@ struct LandlordAddPropertyView: View {
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
+    
+    var addPropertyButton: some View {
+        Button {
+            // Code To Add Property
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(height: 50)
+                    .padding([.leading, .trailing], 20)
+                    .padding(.top, 20)
+                    .foregroundColor(.appBlue)
 
+                Text("ADD")
+                    .padding(.top, 20)
+                    .foregroundColor(.appAliceBlue)
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+            }
+        }
+    }
 }
 
 #Preview {
