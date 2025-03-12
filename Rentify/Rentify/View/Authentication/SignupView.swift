@@ -270,7 +270,7 @@ struct SignupView: View {
                     
                     if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
                         let user = User(id: currentUserId, name: strName, email: strEmail, contact: strContact, role: selectedRole.rawValue)
-                        FirebaseManager.shared.createUser(user: user) { result in
+                        FirebaseManager.shared.createOrUpdateUser(user: user) { result in
                             if(result) {
                                 print("User created successfully!")
                                 saveCurrentUserInUD(user: user)

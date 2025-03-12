@@ -55,7 +55,7 @@ class FirebaseManager {
         return Auth.auth().currentUser?.uid
     }
     
-    func createUser(user: User, completion: ((Bool) -> ())?) {
+    func createOrUpdateUser(user: User, completion: ((Bool) -> ())?) {
         db.collection(USER_COLLECTION).document(user.id).setData([
             "id": user.id,
             "name": user.name,

@@ -26,7 +26,6 @@ struct LandlordMapView: View {
         VStack(spacing: 0) {
             Text("Properties")
                 .padding(.bottom, 10)
-                .padding(.trailing, 40)
                 .frame(maxWidth: .infinity)
                 .font(.system(size: 30))
                 .foregroundColor(.appAliceBlue)
