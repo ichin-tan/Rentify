@@ -19,6 +19,8 @@ struct LoginView: View {
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
     
+    @State private var goToLandlordTabView: Bool = false
+    
     var body: some View {
         
         NavigationStack {
@@ -180,6 +182,9 @@ struct LoginView: View {
                     .fontWeight(.bold)
             }
         }
+        .navigationDestination(isPresented: $goToLandlordTabView) {
+            LandlordTabView()
+        }
     }
     
     var signupView: some View {
@@ -237,8 +242,11 @@ struct LoginView: View {
                                 self.crearFields()
                                 if user.role == Role.Landlord.rawValue {
                                     // Go to Landlord home
+                                    print("Landlord logged in")
+                                    self.goToLandlordTabView = true
                                 } else {
                                     // Go to Tenant home
+                                    print("Tenant logged in")
                                 }
                             } else {
                                 strAlertMessage = "Something went wrong!"
