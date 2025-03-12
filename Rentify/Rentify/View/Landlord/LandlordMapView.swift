@@ -160,8 +160,8 @@ struct LandlordMapView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
 }
 

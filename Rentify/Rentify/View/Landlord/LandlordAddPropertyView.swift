@@ -14,6 +14,8 @@ struct LandlordAddPropertyView: View {
     @State private var strCity: String = ""
     @State private var strCountry: String = ""
     @State private var strRent: String = ""
+    @State private var isShowAlert: Bool = false
+    @State private var strAlertMessage: String = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,6 +51,11 @@ struct LandlordAddPropertyView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
+        .alert(isPresented: $isShowAlert) {
+            Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
+                print("Alert dismissed!")
+            }))
+        }
     }
     
     var propertyImageField: some View {
@@ -173,7 +180,7 @@ struct LandlordAddPropertyView: View {
     
     var addPropertyButton: some View {
         Button {
-            // Code To Add Property
+            self.addProperty()
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -188,6 +195,34 @@ struct LandlordAddPropertyView: View {
                     .font(.system(size: 20))
                     .fontWeight(.bold)
             }
+        }
+    }
+    
+    private func isValidated() -> Bool {
+        var isValidate = true
+        if(strStreetAddress.isEmpty) {
+            isValidate = false
+            strAlertMessage = "Street Address cannot be empty!"
+            isShowAlert = true
+        } else if(strCity.isEmpty) {
+            isValidate = false
+            strAlertMessage = "City cannot be empty!"
+            isShowAlert = true
+        } else if(strCountry.isEmpty) {
+            isValidate = false
+            strAlertMessage = "Country cannot be empty!"
+            isShowAlert = true
+        } else if(strRent.isEmpty || (Double(strRent) ?? 0.0) == 0.0) {
+            isValidate = false
+            strAlertMessage = "Rent cannot be empty!"
+            isShowAlert = true
+        }
+        return isValidate
+    }
+    
+    private func addProperty() {
+        if(isValidated()) {
+            
         }
     }
 }
