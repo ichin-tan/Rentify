@@ -16,8 +16,8 @@ struct LandlordAddPropertyView: View {
     @State private var strRent: String = ""
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
+            VStack {
                 Text("Add Property")
                     .padding(.bottom, 10)
                     .frame(maxWidth: .infinity)
@@ -25,7 +25,9 @@ struct LandlordAddPropertyView: View {
                     .font(.system(size: 30))
                     .foregroundColor(.appAliceBlue)
                     .fontWeight(.bold)
-                
+            }
+            
+            ScrollView {
                 propertyImageField
                 
                 if(strPropertyImage != "") {
@@ -42,9 +44,9 @@ struct LandlordAddPropertyView: View {
                 
                 Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.appColumbiaBlue)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.appColumbiaBlue)
     }
     
     var propertyImageField: some View {
@@ -77,12 +79,12 @@ struct LandlordAddPropertyView: View {
                         .stroke(.appGrayBlue, lineWidth: 1)
                 }
                 .padding([.leading, .trailing], 20)
-                .padding(.top, 20)
+                .padding(.top, 10)
         } placeholder: {
             ProgressView()
                 .frame(height: 200)
                 .padding([.leading, .trailing], 20)
-                .padding(.top, 20)
+                .padding(.top, 10)
         }
     }
     
@@ -99,7 +101,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 20)
+            .padding(.top, 10)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -117,7 +119,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 20)
+            .padding(.top, 10)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -135,7 +137,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 20)
+            .padding(.top, 10)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
@@ -154,7 +156,7 @@ struct LandlordAddPropertyView: View {
                     .stroke(.appGrayBlue, lineWidth: 1)
             }
             .padding([.leading, .trailing], 20)
-            .padding(.top, 20)
+            .padding(.top, 10)
             .autocorrectionDisabled()
             .autocapitalization(.none)
     }
