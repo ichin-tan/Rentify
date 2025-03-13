@@ -66,51 +66,5 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4DA7F38C-F8CC-4B9A-ABD8-3FE6E1B362D2"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Rentify/View/Landlord/LandlordMapView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "4DA7F38C-F8CC-4B9A-ABD8-3FE6E1B362D2 - 654631692878b4e5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Rentify.Property) -&gt; _MapKit_SwiftUI.Annotation&lt;SwiftUI.Text, SwiftUI.Button&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt;&gt; in closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Array&lt;Rentify.Property&gt;, Swift.String, _MapKit_SwiftUI.Annotation&lt;SwiftUI.Text, SwiftUI.Button&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt;&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.mapStyle(_MapKit_SwiftUI.MapStyle) -&gt; some&gt;&gt;.0, Swift.Optional&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, Rentify.SeeDetailPopUpView)&gt;&gt;)&gt; in closure #2 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.mapStyle(_MapKit_SwiftUI.MapStyle) -&gt; some&gt;&gt;.0, Swift.Optional&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, Rentify.SeeDetailPopUpView)&gt;&gt;)&gt;&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.fontWeight(Swift.Optional&lt;SwiftUI.Font.Weight&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt; in Rentify.LandlordMapView.body.getter : some"
-                  moduleName = "Rentify.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chintanpanchal/Documents/Projects/Rentify/Rentify/Rentify/View/Landlord/LandlordMapView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74">
-               </Location>
-               <Location
-                  uuid = "4DA7F38C-F8CC-4B9A-ABD8-3FE6E1B362D2 - 8b8ae5cf7822f073"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.Button&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt; in closure #1 (Rentify.Property) -&gt; _MapKit_SwiftUI.Annotation&lt;SwiftUI.Text, SwiftUI.Button&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt;&gt; in closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Array&lt;Rentify.Property&gt;, Swift.String, _MapKit_SwiftUI.Annotation&lt;SwiftUI.Text, SwiftUI.Button&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt;&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.mapStyle(_MapKit_SwiftUI.MapStyle) -&gt; some&gt;&gt;.0, Swift.Optional&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, Rentify.SeeDetailPopUpView)&gt;&gt;)&gt; in closure #2 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.Color&gt;, &lt;&lt;opaque return type of SwiftUI.View.mapStyle(_MapKit_SwiftUI.MapStyle) -&gt; some&gt;&gt;.0, Swift.Optional&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, Rentify.SeeDetailPopUpView)&gt;&gt;)&gt;&gt;, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.fontWeight(Swift.Optional&lt;SwiftUI.Font.Weight&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt; in Rentify.LandlordMapView.body.getter : some"
-                  moduleName = "Rentify.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chintanpanchal/Documents/Projects/Rentify/Rentify/Rentify/View/Landlord/LandlordMapView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "75"
-                  endingLineNumber = "75">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

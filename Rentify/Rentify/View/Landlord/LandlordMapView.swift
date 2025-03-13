@@ -21,7 +21,6 @@ struct LandlordMapView: View {
     @Environment(\.presentationMode) var presentationMode
 
     @State private var properties: [Property] = []
-//    let annotationsCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16), CLLocationCoordinate2D(latitude: 33.01, longitude: -116.16)]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -70,7 +69,7 @@ struct LandlordMapView: View {
                     
                     Map(position: $cameraPosition) {
                         
-                        ForEach(self.properties) { property in
+                        ForEach(self.searchedProperties()) { property in
                             Annotation("", coordinate: CLLocationCoordinate2D(latitude: property.latitude, longitude: property.longitude)){
                                 Button(action: {
                                     selectedAnnotationTitle = "\(property.streetAddress) \(property.city)"
@@ -162,10 +161,20 @@ struct LandlordMapView: View {
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
-        .onAppear() {
-            FirebaseManager.shared.fetchProperties { arrProperties in
-                self.properties = arrProperties
-            }
+    }
+    
+    func searchedProperties() -> [Property] {
+        if (strSearch.isEmpty) {
+            fetchProperties()
+            return self.properties
+        } else {
+            return self.properties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+        }
+    }
+    
+    private func fetchProperties() {
+        FirebaseManager.shared.fetchProperties { arrProperties in
+            self.properties = arrProperties
         }
     }
 }
