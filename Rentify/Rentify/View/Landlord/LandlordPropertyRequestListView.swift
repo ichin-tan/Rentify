@@ -62,45 +62,29 @@ struct LandlordPropertyRequestListView: View {
                         
                         Spacer()
 
-                        VStack {
-                            Text("Accept")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundColor(.appGrayBlue)
-                                .padding(10)
-                                .background(.appAliceBlue)
-                                .cornerRadius(10)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.appGrayBlue, lineWidth: 1)
-                                }
-                                .onTapGesture {
-                                    self.viewModel.rentSelectedPropertyToUser(userId: user.id) { success in
-                                        if(success) {
-                                            strAlertMessage = "Rented to \(user.name)"
-                                            isShowAlert = true
-                                        } else {
-                                            strAlertMessage = "Something went wrong"
-                                            isShowAlert = true
-                                        }
+                        Text("Accept")
+                            .font(.system(size: 15))
+                            .fontWeight(.medium)
+                            .foregroundColor(.appGrayBlue)
+                            .padding(10)
+                            .background(.appAliceBlue)
+                            .cornerRadius(10)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.appGrayBlue, lineWidth: 1)
+                            }
+                            .onTapGesture {
+                                self.viewModel.rentSelectedPropertyToUser(userId: user.id) { success in
+                                    if(success) {
+                                        strAlertMessage = "Rented to \(user.name)"
+                                        isShowAlert = true
+                                    } else {
+                                        strAlertMessage = "Something went wrong"
+                                        isShowAlert = true
                                     }
                                 }
-                            
-                            Text("Reject")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundColor(.appGrayBlue)
-                                .padding(10)
-                                .background(.appAliceBlue)
-                                .cornerRadius(10)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.appGrayBlue, lineWidth: 1)
-                                }
-                                .onTapGesture {
-                                    print("Rejected")
-                                }
-                        }
+                            }
+                        
                     }
                     .cornerRadius(10)
                     .frame(maxWidth: .infinity)

@@ -157,6 +157,7 @@ struct TenantMapView: View {
     func searchedProperties() -> [Property] {
         var localProperties = self.viewModel.properties
         localProperties = localProperties.filter({ $0.isActivated })
+        localProperties = localProperties.filter({ $0.rentedUserId == "" })
         if (strSearch.isEmpty) {
             return localProperties
         } else {
