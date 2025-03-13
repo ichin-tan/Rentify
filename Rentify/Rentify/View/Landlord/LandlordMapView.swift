@@ -17,7 +17,7 @@ struct LandlordMapView: View {
     @State private var strSearch: String = ""
     @State private var showSeeDetailPopup: Bool = false
     @State private var goToPropertyDetail: Bool = false
-    @State private var selectedAnnotationTitle: String? = nil
+    @State private var selectedProperty: Property? = nil
     @Environment(\.presentationMode) var presentationMode
     @State private var showOnlyMyProperties: Bool = false
     
@@ -75,7 +75,7 @@ struct LandlordMapView: View {
                         ForEach(self.searchedProperties()) { property in
                             Annotation("", coordinate: CLLocationCoordinate2D(latitude: property.latitude, longitude: property.longitude)){
                                 Button(action: {
-                                    selectedAnnotationTitle = "\(property.streetAddress) \(property.city)"
+                                    selectedProperty = property
                                     showSeeDetailPopup = true
                                 }) {
                                     ZStack {
@@ -92,14 +92,14 @@ struct LandlordMapView: View {
                     .padding(1)
                     .mapStyle(.hybrid(elevation: .realistic, pointsOfInterest: .all))
                     
-                    if showSeeDetailPopup, let title = self.selectedAnnotationTitle {
+                    if showSeeDetailPopup, let property = self.selectedProperty {
                         Color.black.opacity(0.7)
                             .cornerRadius(10)
                             .onTapGesture {
                                 showSeeDetailPopup = false
                             }
                         
-                        SeeDetailPopUpView(forRole: .Landlord, annotationTitle: title) {
+                        SeeDetailPopUpView(forRole: .Landlord, annotationTitle: property.address) {
                             showSeeDetailPopup = false
                             goToPropertyDetail = true
                         }
@@ -158,7 +158,7 @@ struct LandlordMapView: View {
             Spacer()
         }
         .navigationDestination(isPresented: $goToPropertyDetail) {
-//            GuestPropertyDetailView()
+            LandlordPropertyDetailView(property: selectedProperty)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)

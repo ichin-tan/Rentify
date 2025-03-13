@@ -252,13 +252,9 @@ struct LandlordAddPropertyView: View {
             strAlertMessage = "Country cannot be empty!"
             isShowAlert = true
         } else if(strRent.isEmpty || (Double(strRent) ?? 0.0) == 0.0) {
-            if let actualNumber = Double(strRent) {
-                return isValidate
-            } else {
-                strAlertMessage = "Rent cannot be empty!"
-                isShowAlert = true
-                isValidate = false
-            }
+            strAlertMessage = "Rent cannot be empty!"
+            isShowAlert = true
+            isValidate = false
         }
         return isValidate
     }
@@ -268,7 +264,7 @@ struct LandlordAddPropertyView: View {
             let address = "\(self.strStreetAddress), \(self.strCity), \(self.strCountry)"
             locManager.getLocationFrom(address: address) { location in
                 if let location = location {
-                    let property = Property(id: UUID().uuidString, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, addedByLandlordId: FirebaseManager.shared.getCurrentUserUIdFromFirebase() ?? "", address: address)
+                    let property = Property(id: UUID().uuidString, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, addedByLandlordId: FirebaseManager.shared.getCurrentUserUIdFromFirebase() ?? "", address: address, isActivated: true)
                     FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
                         if(success) {
                             strAlertMessage = "Property added successfully!"

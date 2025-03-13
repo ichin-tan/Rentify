@@ -19,8 +19,9 @@ struct Property: Codable, Identifiable {
     var longitude: Double
     var address: String
     var addedByLandlordId: String
+    var isActivated: Bool
 
-    init(id: String, imgUrl: String, streetAddress: String, city: String, country: String, rent: Double, latitude: Double, longitude: Double, addedByLandlordId: String, address: String) {
+    init(id: String, imgUrl: String, streetAddress: String, city: String, country: String, rent: Double, latitude: Double, longitude: Double, addedByLandlordId: String, address: String, isActivated: Bool) {
         self.id = id
         self.imgUrl = imgUrl
         self.streetAddress = streetAddress
@@ -31,5 +32,6 @@ struct Property: Codable, Identifiable {
         self.longitude = longitude
         self.address = address
         self.addedByLandlordId = addedByLandlordId
+        self.isActivated = isActivated
     }
 }
