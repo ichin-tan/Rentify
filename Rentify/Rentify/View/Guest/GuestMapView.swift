@@ -17,11 +17,9 @@ struct GuestMapView: View {
     @State private var strSearch: String = ""
     @State private var showSeeDetailPopup: Bool = false
     @State private var goToPropertyDetail: Bool = false
-    @State private var selectedAnnotationTitle: String? = nil
     @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel : PropertyViewModel = PropertyViewModel()
 
-    let annotationsCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16), CLLocationCoordinate2D(latitude: 33.01, longitude: -116.16)]
-    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -34,7 +32,7 @@ struct GuestMapView: View {
                 }
                 .padding(.leading, 15)
                 
-                Text("Properties")
+                Text("Map")
                     .padding(.bottom, 10)
                     .padding(.trailing, 40)
                     .frame(maxWidth: .infinity)
@@ -59,21 +57,11 @@ struct GuestMapView: View {
                         print(newValue)
                     }
                 
-                Button {
-                    
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 20, weight: .bold))
-                        .frame(width: 40, height: 40)
-                        .background(Color.appBlue.opacity(0.9))
-                        .foregroundColor(.appAliceBlue)
-                        .clipShape(Circle())
-                }
             }
             .padding([.leading, .trailing], 20)
             .padding(.top, 15)
             .padding(.bottom, 0)
-            
+                        
             ZStack(alignment: .bottomTrailing) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
@@ -81,10 +69,10 @@ struct GuestMapView: View {
                     
                     Map(position: $cameraPosition) {
                         
-                        ForEach(self.annotationsCoordinates, id: \.self) { coordinate in
-                            Annotation("", coordinate: coordinate){
+                        ForEach(self.searchedProperties()) { property in
+                            Annotation("", coordinate: CLLocationCoordinate2D(latitude: property.latitude, longitude: property.longitude)){
                                 Button(action: {
-                                    selectedAnnotationTitle = String(coordinate.latitude) + " & " + String(coordinate.longitude)
+                                    self.viewModel.selectedProperty = property
                                     showSeeDetailPopup = true
                                 }) {
                                     ZStack {
@@ -101,46 +89,49 @@ struct GuestMapView: View {
                     .padding(1)
                     .mapStyle(.hybrid(elevation: .realistic, pointsOfInterest: .all))
                     
-                    if showSeeDetailPopup, let title = self.selectedAnnotationTitle {
+                    if showSeeDetailPopup, let property = self.viewModel.selectedProperty {
                         Color.black.opacity(0.7)
                             .cornerRadius(10)
                             .onTapGesture {
                                 showSeeDetailPopup = false
                             }
                         
-                        SeeDetailPopUpView(forRole: .Guest, annotationTitle: title) {
+                        SeeDetailPopUpView(forRole: .Tenant, annotationTitle: property.address) {
                             showSeeDetailPopup = false
                             goToPropertyDetail = true
-                        }
-                        .navigationDestination(isPresented: $goToPropertyDetail) {
-                            GuestPropertyDetailView()
                         }
                     }
                 }
             }
             .padding([.leading, .trailing], 20)
             .padding(.top, 15)
-            .padding(.bottom, 0)
+            .padding(.bottom, 10)
             Spacer()
+        }
+        .navigationDestination(isPresented: $goToPropertyDetail) {
+            GuestPropertyDetailView(viewModel: self.viewModel)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+        .onAppear() {
+            self.viewModel.fetchProperties()
+        }
+    }
+    
+    func searchedProperties() -> [Property] {
+        var localProperties = self.viewModel.properties
+        localProperties = localProperties.filter({ $0.isActivated })
+        localProperties = localProperties.filter({ $0.rentedUserId == "" })
+        if (strSearch.isEmpty) {
+            return localProperties
+        } else {
+            return localProperties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+        }
     }
 }
 
 #Preview {
     GuestMapView()
-}
-
-extension CLLocationCoordinate2D: @retroactive Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
-    }
-}
-extension CLLocationCoordinate2D : @retroactive Hashable {
-    public func hash(into hasher: inout Hasher) {
-        
-    }
 }
