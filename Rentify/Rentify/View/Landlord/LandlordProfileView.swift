@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class LandlordProfileViewModel: ObservableObject {
+class ProfileViewModel: ObservableObject {
     @Published var currentUser: User?
     
     func fetchCurrentUser(completion: ((User) -> ())?) {
@@ -22,7 +22,7 @@ class LandlordProfileViewModel: ObservableObject {
 
 struct LandlordProfileView: View {
         
-    @StateObject private var viewModel = LandlordProfileViewModel()
+    @StateObject private var viewModel = ProfileViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isShowAlert: Bool = false
     @State private var isShowLogoutAlert: Bool = false
@@ -36,7 +36,7 @@ struct LandlordProfileView: View {
         VStack {
             
             HStack {
-                Text("PROFILE")
+                Text("Profile")
                     .padding(.bottom, 10)
                     .padding(.leading, 40)
                     .frame(maxWidth: .infinity)
@@ -179,7 +179,7 @@ struct LandlordProfileView: View {
                     .padding(.top, 10)
                     .foregroundColor(.appBlue)
 
-                Text(showEditFields ? "Edit" : "EDIT PROFILE")
+                Text(showEditFields ? "Edit" : "Edit Profile")
                     .padding(.top, 12)
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))
