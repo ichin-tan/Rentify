@@ -10,11 +10,12 @@ import SwiftUI
 struct TenantTabView: View {
     
     @State private var selection = 0
-    
+    @ObservedObject var viewModel = PropertyViewModel()
+
     var body: some View {
         
         TabView(selection: $selection) {
-            TenantMapView()
+            TenantMapView(viewModel: self.viewModel)
                 .tabItem {
                     Image(systemName: "map.fill")
                     Text("Map")
@@ -22,7 +23,7 @@ struct TenantTabView: View {
                 .tag(0)
 
             
-            TenantShortlistedPropertyListView()
+            TenantShortlistedPropertyListView(viewModel: self.viewModel)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Shortlisted Property")

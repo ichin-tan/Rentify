@@ -18,8 +18,7 @@ struct TenantMapView: View {
     @State private var showSeeDetailPopup: Bool = false
     @State private var goToPropertyDetail: Bool = false
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel = PropertyViewModel()
-
+    @ObservedObject var viewModel : PropertyViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -166,5 +165,5 @@ struct TenantMapView: View {
 }
 
 #Preview {
-    TenantMapView()
+    TenantMapView(viewModel: PropertyViewModel())
 }

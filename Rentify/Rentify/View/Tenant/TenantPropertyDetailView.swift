@@ -206,7 +206,6 @@ struct TenantPropertyDetailView: View {
                     
                     if !self.viewModel.checkIfTenantHasShortlistedProperty(id: property.id) {
                         Button {
-                            // code to shortlist property
                             var localProperty = property
                             if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
                                 localProperty.shortListedTenantIds.append(currentUserId)
@@ -235,10 +234,69 @@ struct TenantPropertyDetailView: View {
                             }
                         }
                         .padding(.top,5)
+                    } else {
+                        Button {
+                            var localProperty = property
+                            if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                                localProperty.shortListedTenantIds.removeAll(where: { $0 == currentUserId })
+                                FirebaseManager.shared.addOrUpdateProperty(property: localProperty) { success in
+                                    if(success) {
+                                        strAlertMessage = "Added to shortlist!"
+                                        self.viewModel.fetchProperties()
+                                        isShowAlert = true
+                                    } else {
+                                        strAlertMessage = "Something went wrong!"
+                                        isShowAlert = true
+                                    }
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .frame(height: 50)
+                                    .padding([.leading, .trailing], 20)
+                                    .foregroundColor(.appBlue)
+
+                                Text("Remove from Shortlist")
+                                    .foregroundColor(.appAliceBlue)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        .padding(.top,5)
                     }
+                } else {
+                    Button {
+                        // code to request for rent
+                        var localProperty = property
+                        if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                            localProperty.requestedTenantIds.removeAll(where: { $0 == currentUserId })
+                            FirebaseManager.shared.addOrUpdateProperty(property: localProperty) { success in
+                                if(success) {
+                                    strAlertMessage = "Request cancelled!"
+                                    self.viewModel.fetchProperties()
+                                    isShowAlert = true
+                                } else {
+                                    strAlertMessage = "Something went wrong!"
+                                    isShowAlert = true
+                                }
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(height: 50)
+                                .padding([.leading, .trailing], 20)
+                                .foregroundColor(.appBlue)
 
+                            Text("Cancel Request")
+                                .foregroundColor(.appAliceBlue)
+                                .font(.system(size: 20))
+                                .fontWeight(.bold)
+                        }
+                    }
+                    .padding(.top,5)
                 }
-
             }
             Spacer()
 

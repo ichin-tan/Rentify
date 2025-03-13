@@ -48,5 +48,16 @@ class PropertyViewModel: ObservableObject {
         }
         return false
     }
-
+    
+    func getShortlistedPropertiesForCurrentUserTenant() -> [Property] {
+        var arrToReturn: [Property] = []
+        if let currentUserID = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+            for property in properties {
+                if(property.shortListedTenantIds.contains(currentUserID)) {
+                    arrToReturn.append(property)
+                }
+            }
+        }
+        return arrToReturn
+    }
 }
