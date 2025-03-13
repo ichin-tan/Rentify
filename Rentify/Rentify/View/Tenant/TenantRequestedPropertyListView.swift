@@ -7,37 +7,36 @@
 
 import SwiftUI
 
-struct TenantShortlistedPropertyListView: View {
+struct TenantRequestedPropertyListView: View {
     
     @ObservedObject var viewModel: PropertyViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var goToPropertyDetail: Bool = false
-    @State private var goToRequestedProperty: Bool = false
     
     var body: some View {
         VStack {
             HStack {
-                Text("Shortlist")
-                    .padding(.bottom, 10)
-                    .padding(.leading, 40)
-                    .frame(maxWidth: .infinity)
-                    .font(.system(size: 30))
-                
                 Button {
-                    goToRequestedProperty = true
+                    presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Image(systemName: "list.bullet")
+                    Image(systemName: "chevron.left.square.fill")
                         .font(.system(size: 25))
                         .padding(.bottom, 5)
                 }
-                .padding(.trailing, 15)
+                .padding(.leading, 15)
+                
+                Text("Requests")
+                    .padding(.bottom, 10)
+                    .padding(.trailing, 40)
+                    .frame(maxWidth: .infinity)
+                    .font(.system(size: 30))
             }
             .foregroundColor(.appAliceBlue)
             .background(Color.appBlue)
             .fontWeight(.bold)
 
             List {
-                ForEach(self.viewModel.getShortlistedPropertiesForCurrentUserTenant()) { property in
+                ForEach(self.viewModel.getRequestedPropertiesForCurrentUserTenant()) { property in
                     HStack(spacing: 15) {
                         AsyncImage(url: URL(string: property.imgUrl)) { image in
                             image
@@ -98,9 +97,6 @@ struct TenantShortlistedPropertyListView: View {
         .navigationDestination(isPresented: $goToPropertyDetail) {
             TenantPropertyDetailView(viewModel: self.viewModel)
         }
-        .navigationDestination(isPresented: $goToRequestedProperty) {
-            TenantRequestedPropertyListView(viewModel: self.viewModel)
-        }
     }
     
     var listRow: some View {
@@ -110,5 +106,5 @@ struct TenantShortlistedPropertyListView: View {
 }
 
 #Preview {
-    TenantShortlistedPropertyListView(viewModel: PropertyViewModel())
+    TenantRequestedPropertyListView(viewModel: PropertyViewModel())
 }

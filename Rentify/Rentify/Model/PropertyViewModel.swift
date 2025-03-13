@@ -60,4 +60,16 @@ class PropertyViewModel: ObservableObject {
         }
         return arrToReturn
     }
+    
+    func getRequestedPropertiesForCurrentUserTenant() -> [Property] {
+        var arrToReturn: [Property] = []
+        if let currentUserID = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+            for property in properties {
+                if(property.requestedTenantIds.contains(currentUserID)) {
+                    arrToReturn.append(property)
+                }
+            }
+        }
+        return arrToReturn
+    }
 }
