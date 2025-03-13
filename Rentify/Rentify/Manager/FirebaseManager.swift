@@ -88,29 +88,51 @@ class FirebaseManager {
                 }
             }        
     }
-    
-    
-//    func fetchPlants(completion: (([Plant]) -> ())?) {
-//        
-//        var arrToReturn : [Plant] = []
-//        
-//        db.collection(plantsCollection)
-//            .addSnapshotListener({ snapshot, error  in
-//                
-//                if let snapshot = snapshot {
-//                    for document in snapshot.documents {
-//                        do {
-//                            let plant = try document.data(as: Plant.self)
-//                            arrToReturn.append(plant)
-//                        } catch {
-//                            print("Error while fetching the plant")
-//                        }
-//                    }
-//                    
-//                    completion?(arrToReturn)
-//                }
-//            }
-//        )
-//    }
 
+    //MARK: - LANDLORD - PROPERTIES METHODS
+
+    func addOrUpdateProperty(property: Property, completion: ((Bool) -> ())?) {
+        
+        db.collection(PROPERTY_COLLECTION).document(property.id).setData([
+            "id": property.id,
+            "imgUrl": property.imgUrl,
+            "strrtAddress": property.streetAddress,
+            "city": property.city,
+            "country": property.country,
+            "rent": property.rent,
+            "latitude": property.latitude,
+            "longitude": property.longitude,
+            "addedByLandlordId": property.addedByLandlordId
+        ]) { error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion?(false)
+            } else {
+                completion?(true)
+            }
+        }
+    }
+    
+    func fetchProperties(completion: (([Property]) -> ())?) {
+        
+        var arrToReturn : [Property] = []
+        
+        db.collection(PROPERTY_COLLECTION)
+            .addSnapshotListener({ snapshot, error  in
+                
+                if let snapshot = snapshot {
+                    for document in snapshot.documents {
+                        do {
+                            let property = try document.data(as: Property.self)
+                            arrToReturn.append(property)
+                        } catch {
+                            print("Error while fetching the plant")
+                        }
+                    }
+                    
+                    completion?(arrToReturn)
+                }
+            }
+        )
+    }
 }

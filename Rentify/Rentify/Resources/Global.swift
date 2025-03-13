@@ -21,6 +21,7 @@ func isValidEmail(_ email: String) -> Bool {
 }
 
 let USER_COLLECTION = "Users"
+let PROPERTY_COLLECTION = "Properties"
 
 let UD = UserDefaults.standard
 var UD_KEY_CURRENT_USER = "CURRENT_USER"
