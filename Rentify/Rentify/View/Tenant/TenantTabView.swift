@@ -19,7 +19,7 @@ struct TenantTabView: View {
                     Image(systemName: "map.fill")
                     Text("Map")
                 }
-                .tag(1)
+                .tag(0)
 
             
             TenantRequestedPropertyListView()
@@ -27,7 +27,7 @@ struct TenantTabView: View {
                     Image(systemName: "house.fill")
                     Text("Add Property")
                 }
-                .tag(0)
+                .tag(1)
             
             
             TenantProfileView()

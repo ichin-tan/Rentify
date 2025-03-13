@@ -12,7 +12,7 @@ struct LandlordPropertyDetailView: View {
     
     @ObservedObject var viewModel: PropertyViewModel
     
-    @State var goToEditProfileScreen = false
+    @State var goToEditPropertyScreen = false
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
 
@@ -120,7 +120,7 @@ struct LandlordPropertyDetailView: View {
                     
                     if(property.isActivated) {
                         Button {
-                            goToEditProfileScreen = true
+                            goToEditPropertyScreen = true
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -202,7 +202,7 @@ struct LandlordPropertyDetailView: View {
                 print("Alert dismissed!")
             }))
         }
-        .navigationDestination(isPresented: $goToEditProfileScreen) {
+        .navigationDestination(isPresented: $goToEditPropertyScreen) {
             LandlordEditPropertyView(viewModel: self.viewModel)
         }
     }
