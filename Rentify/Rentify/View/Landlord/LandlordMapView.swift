@@ -20,7 +20,8 @@ struct LandlordMapView: View {
     @State private var selectedAnnotationTitle: String? = nil
     @Environment(\.presentationMode) var presentationMode
 
-    let annotationsCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16), CLLocationCoordinate2D(latitude: 33.01, longitude: -116.16)]
+    @State private var properties: [Property] = []
+//    let annotationsCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16), CLLocationCoordinate2D(latitude: 33.01, longitude: -116.16)]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -69,10 +70,10 @@ struct LandlordMapView: View {
                     
                     Map(position: $cameraPosition) {
                         
-                        ForEach(self.annotationsCoordinates, id: \.self) { coordinate in
-                            Annotation("", coordinate: coordinate){
+                        ForEach(self.properties) { property in
+                            Annotation("", coordinate: CLLocationCoordinate2D(latitude: property.latitude, longitude: property.longitude)){
                                 Button(action: {
-                                    selectedAnnotationTitle = String(coordinate.latitude) + " & " + String(coordinate.longitude)
+                                    selectedAnnotationTitle = "\(property.streetAddress) \(property.city)"
                                     showSeeDetailPopup = true
                                 }) {
                                     ZStack {
@@ -155,12 +156,17 @@ struct LandlordMapView: View {
             Spacer()
         }
         .navigationDestination(isPresented: $goToPropertyDetail) {
-            GuestPropertyDetailView()
+//            GuestPropertyDetailView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+        .onAppear() {
+            FirebaseManager.shared.fetchProperties { arrProperties in
+                self.properties = arrProperties
+            }
+        }
     }
 }
 

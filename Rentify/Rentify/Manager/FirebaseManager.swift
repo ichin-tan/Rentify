@@ -96,13 +96,14 @@ class FirebaseManager {
         db.collection(PROPERTY_COLLECTION).document(property.id).setData([
             "id": property.id,
             "imgUrl": property.imgUrl,
-            "strrtAddress": property.streetAddress,
+            "streetAddress": property.streetAddress,
             "city": property.city,
             "country": property.country,
             "rent": property.rent,
             "latitude": property.latitude,
             "longitude": property.longitude,
-            "addedByLandlordId": property.addedByLandlordId
+            "addedByLandlordId": property.addedByLandlordId,
+            "address": property.address
         ]) { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -126,7 +127,7 @@ class FirebaseManager {
                             let property = try document.data(as: Property.self)
                             arrToReturn.append(property)
                         } catch {
-                            print("Error while fetching the plant")
+                            print("Error while fetching the properties")
                         }
                     }
                     

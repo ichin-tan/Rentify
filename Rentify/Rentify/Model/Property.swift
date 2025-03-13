@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Property: Codable {
+struct Property: Codable, Identifiable {
     
     var id: String
     var imgUrl: String
@@ -17,9 +17,10 @@ class Property: Codable {
     var rent: Double
     var latitude: Double
     var longitude: Double
+    var address: String
     var addedByLandlordId: String
 
-    init(id: String, imgUrl: String, streetAddress: String, city: String, country: String, rent: Double, latitude: Double, longitude: Double, addedByLandlordId: String) {
+    init(id: String, imgUrl: String, streetAddress: String, city: String, country: String, rent: Double, latitude: Double, longitude: Double, addedByLandlordId: String, address: String) {
         self.id = id
         self.imgUrl = imgUrl
         self.streetAddress = streetAddress
@@ -28,6 +29,7 @@ class Property: Codable {
         self.rent = rent
         self.latitude = latitude
         self.longitude = longitude
+        self.address = address
         self.addedByLandlordId = addedByLandlordId
     }
 }
