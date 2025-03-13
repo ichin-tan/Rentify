@@ -30,7 +30,7 @@ struct TenantTabView: View {
                 .tag(1)
             
             
-            TenantProfileView()
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")

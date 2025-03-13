@@ -27,7 +27,7 @@ struct LandlordTabView: View {
                 }
                 .tag(1)
             
-            LandlordProfileView()
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")

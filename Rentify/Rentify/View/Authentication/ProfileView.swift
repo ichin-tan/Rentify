@@ -1,13 +1,27 @@
 //
-//  TenantProfileView.swift
+//  LandlordProfileView.swift
 //  Rentify
 //
-//  Created by CP on 13/03/25.
+//  Created by CP on 11/03/25.
 //
 
 import SwiftUI
 
-struct TenantProfileView: View {
+class ProfileViewModel: ObservableObject {
+    @Published var currentUser: User?
+    
+    func fetchCurrentUser(completion: ((User) -> ())?) {
+        if let currentID = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+            FirebaseManager.shared.fetchUser(for: currentID) { user in
+                self.currentUser = user
+                completion?(self.currentUser!)
+            }
+        }
+    }
+}
+
+struct ProfileView: View {
+        
     @StateObject private var viewModel = ProfileViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isShowAlert: Bool = false
@@ -90,6 +104,9 @@ struct TenantProfileView: View {
                     }
 
                     editProfileButton
+                    
+                    
+                    
                 }
                 .padding(.top, 20)
 
@@ -281,8 +298,9 @@ struct TenantProfileView: View {
         }
         return isValidate
     }
+
 }
 
 #Preview {
-    TenantProfileView()
+    ProfileView()
 }
