@@ -19,7 +19,8 @@ struct LandlordMapView: View {
     @State private var goToPropertyDetail: Bool = false
     @State private var selectedAnnotationTitle: String? = nil
     @Environment(\.presentationMode) var presentationMode
-
+    @State private var showOnlyMyProperties: Bool = false
+    
     @State private var properties: [Property] = []
     
     var body: some View {
@@ -47,20 +48,22 @@ struct LandlordMapView: View {
                         print(newValue)
                     }
                 
-                Button {
-                    
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 20, weight: .bold))
-                        .frame(width: 40, height: 40)
-                        .background(Color.appBlue.opacity(0.9))
-                        .foregroundColor(.appAliceBlue)
-                        .clipShape(Circle())
-                }
+//                Button {
+//                    
+//                } label: {
+//                    Image(systemName: "magnifyingglass")
+//                        .font(.system(size: 20, weight: .bold))
+//                        .frame(width: 40, height: 40)
+//                        .background(Color.appBlue.opacity(0.9))
+//                        .foregroundColor(.appAliceBlue)
+//                        .clipShape(Circle())
+//                }
             }
             .padding([.leading, .trailing], 20)
             .padding(.top, 15)
             .padding(.bottom, 0)
+            
+            ownPropertyCheckBoxView
             
             ZStack(alignment: .bottomTrailing) {
                 ZStack {
@@ -161,14 +164,64 @@ struct LandlordMapView: View {
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+        .onAppear() {
+            self.fetchProperties()
+        }
+    }
+    
+    var ownPropertyCheckBoxView: some View {
+        HStack(spacing: 10) {
+            Text("Show my own properties")
+                .foregroundColor(.appGrayBlue)
+                .fontWeight(.medium)
+            
+            Button {
+                showOnlyMyProperties.toggle()
+            } label: {
+                if showOnlyMyProperties {
+                    trueCheckbox
+                } else {
+                    falseCheckBox
+                }
+            }
+        }
+        .padding([.leading, .trailing], 20)
+        .padding(.top, 10)
+    }
+    
+    private var falseCheckBox: some View {
+        RoundedRectangle(cornerRadius: 4)
+            .stroke(.appGrayBlue, lineWidth: 1)
+            .frame(width: 20, height: 20)
+            .background(.appAliceBlue)
+    }
+    
+    private var trueCheckbox: some View {
+        RoundedRectangle(cornerRadius: 4)
+            .stroke(.appGrayBlue, lineWidth: 1)
+            .frame(width: 20, height: 20)
+            .background(.appAliceBlue)
+            .overlay {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.appGrayBlue)
+                    .fontWeight(.bold)
+            }
     }
     
     func searchedProperties() -> [Property] {
-        if (strSearch.isEmpty) {
-            fetchProperties()
-            return self.properties
+        if (showOnlyMyProperties) {
+            let myOnlyProperties = properties.filter({ $0.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase() })
+            if (strSearch.isEmpty) {
+                return myOnlyProperties
+            } else {
+                return myOnlyProperties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+            }
         } else {
-            return self.properties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+            if (strSearch.isEmpty) {
+                return self.properties
+            } else {
+                return self.properties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+            }
         }
     }
     
