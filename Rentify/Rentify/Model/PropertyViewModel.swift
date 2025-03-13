@@ -28,4 +28,14 @@ class PropertyViewModel: ObservableObject {
             self.landlord = landlord
         }
     }
+    
+    func checkIfTenantHasShortlistedProperty(id: String) -> Bool {
+        
+        if let property = self.properties.first(where: { $0.id == id }) {
+            if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                return property.shortListedTenantIds.contains(currentUserId)
+            }
+        }
+        return false
+    }
 }

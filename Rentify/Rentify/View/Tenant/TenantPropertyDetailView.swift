@@ -11,6 +11,8 @@ struct TenantPropertyDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var viewModel: PropertyViewModel
+    @State private var isShowAlert: Bool = false
+    @State private var strAlertMessage: String = ""
     
     var body: some View {
         
@@ -185,23 +187,38 @@ struct TenantPropertyDetailView: View {
                 }
                 .padding(.top,5)
 
-                Button {
-                    // code to shortlist property
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(height: 50)
-                            .padding([.leading, .trailing], 20)
-                            .foregroundColor(.appBlue)
+                if !self.viewModel.checkIfTenantHasShortlistedProperty(id: property.id) {
+                    Button {
+                        // code to shortlist property
+                        var localProperty = property
+                        if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                            localProperty.shortListedTenantIds.append(currentUserId)
+                            FirebaseManager.shared.addOrUpdateProperty(property: localProperty) { success in
+                                if(success) {
+                                    strAlertMessage = "Added to shortlist!"
+                                    self.viewModel.fetchProperties()
+                                    isShowAlert = true
+                                } else {
+                                    strAlertMessage = "Something went wrong!"
+                                    isShowAlert = true
+                                }
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(height: 50)
+                                .padding([.leading, .trailing], 20)
+                                .foregroundColor(.appBlue)
 
-                        Text("Shortlist Property")
-                            .foregroundColor(.appAliceBlue)
-                            .font(.system(size: 20))
-                            .fontWeight(.bold)
+                            Text("Shortlist Property")
+                                .foregroundColor(.appAliceBlue)
+                                .font(.system(size: 20))
+                                .fontWeight(.bold)
+                        }
                     }
+                    .padding(.top,5)
                 }
-                .padding(.top,5)
-                
             }
             Spacer()
 
@@ -214,6 +231,11 @@ struct TenantPropertyDetailView: View {
             if let property = self.viewModel.selectedProperty {
                 self.viewModel.fetchLandLord(userID: property.addedByLandlordId)
             }
+        }
+        .alert(isPresented: $isShowAlert) {
+            Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
+                print("Alert dismissed!")
+            }))
         }
     }
 }
