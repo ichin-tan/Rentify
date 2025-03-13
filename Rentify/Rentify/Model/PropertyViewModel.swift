@@ -38,4 +38,15 @@ class PropertyViewModel: ObservableObject {
         }
         return false
     }
+    
+    func checkIfTenantHasRequestdForProperty(id: String) -> Bool {
+        
+        if let property = self.properties.first(where: { $0.id == id }) {
+            if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                return property.requestedTenantIds.contains(currentUserId)
+            }
+        }
+        return false
+    }
+
 }

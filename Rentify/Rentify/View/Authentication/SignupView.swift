@@ -76,7 +76,7 @@ struct SignupView: View {
             LandlordTabView()
         }
         .navigationDestination(isPresented: $goToTenantTabView) {
-            LandlordTabView()
+            TenantTabView()
         }
     }
     
@@ -283,6 +283,15 @@ struct SignupView: View {
                             if(result) {
                                 print("User created successfully!")
 //                                saveCurrentUserInUD(user: user)
+                                if(isRememberMe) {
+                                    currentUserRememberME = true
+                                    currentUserEmail = user.email
+                                    currentUserPassword = strPassword
+                                } else {
+                                    currentUserRememberME = false
+                                    currentUserEmail = ""
+                                    currentUserPassword = ""
+                                }
                                 self.crearFields()
                                 if user.role == Role.Landlord.rawValue {
                                     // Go to Landlord home
@@ -351,6 +360,7 @@ struct SignupView: View {
         strPassword = ""
         isPasswordVisible = false
         isPasswordFocused = false
+        isRememberMe = false
     }
 }
 

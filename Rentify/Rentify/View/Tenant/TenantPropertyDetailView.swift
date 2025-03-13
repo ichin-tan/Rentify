@@ -169,33 +169,18 @@ struct TenantPropertyDetailView: View {
                     .padding(.top, 0)
                 }
                 
-                
-                Button {
-                    // code to request for rent
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(height: 50)
-                            .padding([.leading, .trailing], 20)
-                            .foregroundColor(.appBlue)
-
-                        Text("Request for rent")
-                            .foregroundColor(.appAliceBlue)
-                            .font(.system(size: 20))
-                            .fontWeight(.bold)
-                    }
-                }
-                .padding(.top,5)
-
-                if !self.viewModel.checkIfTenantHasShortlistedProperty(id: property.id) {
+                if !self.viewModel.checkIfTenantHasRequestdForProperty(id: property.id) {
                     Button {
-                        // code to shortlist property
+                        // code to request for rent
                         var localProperty = property
                         if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
-                            localProperty.shortListedTenantIds.append(currentUserId)
+                            localProperty.requestedTenantIds.append(currentUserId)
+                            if(localProperty.shortListedTenantIds.contains(currentUserId)) {
+                                localProperty.shortListedTenantIds.removeAll(where: { $0 == currentUserId })
+                            }
                             FirebaseManager.shared.addOrUpdateProperty(property: localProperty) { success in
                                 if(success) {
-                                    strAlertMessage = "Added to shortlist!"
+                                    strAlertMessage = "Request sent to landlord!"
                                     self.viewModel.fetchProperties()
                                     isShowAlert = true
                                 } else {
@@ -211,14 +196,49 @@ struct TenantPropertyDetailView: View {
                                 .padding([.leading, .trailing], 20)
                                 .foregroundColor(.appBlue)
 
-                            Text("Shortlist Property")
+                            Text("Request for rent")
                                 .foregroundColor(.appAliceBlue)
                                 .font(.system(size: 20))
                                 .fontWeight(.bold)
                         }
                     }
                     .padding(.top,5)
+                    
+                    if !self.viewModel.checkIfTenantHasShortlistedProperty(id: property.id) {
+                        Button {
+                            // code to shortlist property
+                            var localProperty = property
+                            if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
+                                localProperty.shortListedTenantIds.append(currentUserId)
+                                FirebaseManager.shared.addOrUpdateProperty(property: localProperty) { success in
+                                    if(success) {
+                                        strAlertMessage = "Added to shortlist!"
+                                        self.viewModel.fetchProperties()
+                                        isShowAlert = true
+                                    } else {
+                                        strAlertMessage = "Something went wrong!"
+                                        isShowAlert = true
+                                    }
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .frame(height: 50)
+                                    .padding([.leading, .trailing], 20)
+                                    .foregroundColor(.appBlue)
+
+                                Text("Shortlist Property")
+                                    .foregroundColor(.appAliceBlue)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        .padding(.top,5)
+                    }
+
                 }
+
             }
             Spacer()
 
