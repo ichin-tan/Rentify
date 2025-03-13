@@ -202,7 +202,7 @@ struct LandlordAddPropertyView: View {
     
     var fetchCurrentLocationButton: some View {
         Button {
-            locManager.performReverseGeocoding { place in
+            locManager.getPlaceThroughGeocoding { place in
                 if let address = place {
                     if locManager.currentLocation.coordinate.latitude == 0.0 && locManager.currentLocation.coordinate.longitude == 0.0 {
                         strAlertMessage = "Couldnt't find address!"
@@ -265,7 +265,17 @@ struct LandlordAddPropertyView: View {
     
     private func addProperty() {
         if(isValidated()) {
-            // Add A Property 
+            let address = "\(self.strStreetAddress), \(self.strCity), \(self.strCountry)"
+            locManager.getLocationFrom(address: address) { location in
+                if let location = location {
+                    let property = Property(id: UUID().uuidString, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                    print(property)
+                    
+                } else {
+                    strAlertMessage = "Couldn't add property because geocoding didn't work!"
+                    isShowAlert = true
+                }
+            }
         }
     }
 }

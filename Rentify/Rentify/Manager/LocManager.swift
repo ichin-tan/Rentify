@@ -50,16 +50,30 @@ class LocManager : NSObject, ObservableObject {
         }
     }
     
-    func performReverseGeocoding(completion: ((CLPlacemark?) -> ())?) {
+    func getPlaceThroughGeocoding(completion: ((CLPlacemark?) -> ())?) {
         
         self.geoCoder.reverseGeocodeLocation(currentLocation, completionHandler: { (placemarks, error) in
             
             if (error != nil){
-               print("Unable to perform reverse geocoding : \(error!)")
-                return
+                print("Unable to perform reverse geocoding : \(error!)")
+                completion?(nil)
             } else {
                 completion?(placemarks?.first)
             }
+        })
+    }
+    
+    func getLocationFrom(address: String, completion: ((CLLocation?) -> ())?){
+        
+        self.geoCoder.geocodeAddressString(address, completionHandler: { (placemarks, error) in
+            
+            if (error != nil) {
+                print("Unable to perform forward geocoding : \(error!)")
+                completion?(nil)
+            } else {
+                completion?(placemarks?.first?.location)
+            }
+            
         })
     }
 }
