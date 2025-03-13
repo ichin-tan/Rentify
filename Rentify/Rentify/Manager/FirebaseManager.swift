@@ -104,7 +104,8 @@ class FirebaseManager {
             "longitude": property.longitude,
             "addedByLandlordId": property.addedByLandlordId,
             "address": property.address,
-            "isActivated": property.isActivated
+            "isActivated": property.isActivated,
+            "shortListedTenantIds": property.shortListedTenantIds
         ]) { error in
             if let error = error {
                 print(error.localizedDescription)

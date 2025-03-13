@@ -22,10 +22,10 @@ struct TenantTabView: View {
                 .tag(0)
 
             
-            TenantRequestedPropertyListView()
+            TenantShortlistedPropertyListView()
                 .tabItem {
                     Image(systemName: "house.fill")
-                    Text("Add Property")
+                    Text("Shortlisted Property")
                 }
                 .tag(1)
             

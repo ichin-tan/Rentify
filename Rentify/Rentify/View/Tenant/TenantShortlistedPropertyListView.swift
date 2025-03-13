@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct TenantRequestedPropertyListView: View {
+struct TenantShortlistedPropertyListView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    TenantRequestedPropertyListView()
+    TenantShortlistedPropertyListView()
 }

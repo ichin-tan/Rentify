@@ -264,7 +264,7 @@ struct LandlordAddPropertyView: View {
             let address = "\(self.strStreetAddress), \(self.strCity), \(self.strCountry)"
             locManager.getLocationFrom(address: address) { location in
                 if let location = location {
-                    let property = Property(id: UUID().uuidString, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, addedByLandlordId: FirebaseManager.shared.getCurrentUserUIdFromFirebase() ?? "", address: address, isActivated: true)
+                    let property = Property(id: UUID().uuidString, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, address: address, addedByLandlordId: FirebaseManager.shared.getCurrentUserUIdFromFirebase() ?? "", isActivated: true, shortListedTenantIds: [])
                     FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
                         if(success) {
                             strAlertMessage = "Property added successfully!"
