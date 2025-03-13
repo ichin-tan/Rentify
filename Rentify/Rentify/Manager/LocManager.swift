@@ -12,10 +12,9 @@ class LocManager : NSObject, ObservableObject {
     
     private static var shared : LocManager?
     private let locationManager : CLLocationManager = CLLocationManager()
-    private var authorizationStatus : CLAuthorizationStatus = .notDetermined
+    @Published var authorizationStatus : CLAuthorizationStatus = .notDetermined
     private let geoCoder = CLGeocoder()
     @Published var fwdGeoLocation : CLLocation = CLLocation(latitude: 0.0, longitude: 0.0)
-    @Published var reverseGeoAddress : String  = ""
     @Published var currentLocation : CLLocation = CLLocation(latitude: 0.0, longitude: 0.0)
     
     static func getInstance() -> LocManager {
@@ -27,6 +26,7 @@ class LocManager : NSObject, ObservableObject {
     
     private override init() {
         super.init()
+        self.checkLocationPermissions()
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
     }
@@ -48,6 +48,19 @@ class LocManager : NSObject, ObservableObject {
             @unknown default:
                 print("Unknown Authorization status")
         }
+    }
+    
+    func performReverseGeocoding(completion: ((CLPlacemark?) -> ())?) {
+        
+        self.geoCoder.reverseGeocodeLocation(currentLocation, completionHandler: { (placemarks, error) in
+            
+            if (error != nil){
+               print("Unable to perform reverse geocoding : \(error!)")
+                return
+            } else {
+                completion?(placemarks?.first)
+            }
+        })
     }
 }
 

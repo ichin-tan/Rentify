@@ -16,6 +16,7 @@ struct LandlordAddPropertyView: View {
     @State private var strRent: String = ""
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
+    private var locManager = LocManager.getInstance()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -201,7 +202,24 @@ struct LandlordAddPropertyView: View {
     
     var fetchCurrentLocationButton: some View {
         Button {
-            
+            locManager.performReverseGeocoding { place in
+                if let address = place {
+                    if locManager.currentLocation.coordinate.latitude == 0.0 && locManager.currentLocation.coordinate.longitude == 0.0 {
+                        strAlertMessage = "Couldnt't find address!"
+                        isShowAlert = true
+
+                    } else {
+                        print(address)
+                        strCity = place?.subLocality ?? ""
+                        strCountry = place?.country ?? ""
+                        strStreetAddress = place?.thoroughfare ?? ""
+                    }
+                } else {
+                    strAlertMessage = "Couldnt't find address!"
+                    isShowAlert = true
+                }
+            }
+
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -234,16 +252,20 @@ struct LandlordAddPropertyView: View {
             strAlertMessage = "Country cannot be empty!"
             isShowAlert = true
         } else if(strRent.isEmpty || (Double(strRent) ?? 0.0) == 0.0) {
-            isValidate = false
-            strAlertMessage = "Rent cannot be empty!"
-            isShowAlert = true
+            if let actualNumber = Double(strRent) {
+                return isValidate
+            } else {
+                strAlertMessage = "Rent cannot be empty!"
+                isShowAlert = true
+                isValidate = false
+            }
         }
         return isValidate
     }
     
     private func addProperty() {
         if(isValidated()) {
-            
+            // Add A Property 
         }
     }
 }
