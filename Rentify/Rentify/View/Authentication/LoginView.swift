@@ -176,7 +176,7 @@ struct LoginView: View {
                     .padding(.top, 10)
                     .foregroundColor(.appBlue)
 
-                Text("LOG IN")
+                Text("Log In")
                     .padding(.top, 12)
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))
@@ -220,7 +220,7 @@ struct LoginView: View {
                     .padding(.top, 10)
                     .foregroundColor(.appBlue)
 
-                Text("GUEST LOGIN")
+                Text("Browse As Guest")
                     .padding(.top, 12)
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))

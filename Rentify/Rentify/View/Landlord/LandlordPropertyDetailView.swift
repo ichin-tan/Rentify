@@ -10,7 +10,9 @@ import SwiftUI
 struct LandlordPropertyDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    @State var property: Property?
+    @ObservedObject var viewModel: PropertyViewModel
+    
+    @State var goToEditProfileScreen = false
     
     var body: some View {
         VStack {
@@ -24,7 +26,7 @@ struct LandlordPropertyDetailView: View {
                 }
                 .padding(.leading, 15)
                 
-                Text("Properties")
+                Text(self.viewModel.selectedProperty?.streetAddress ?? "Property Details")
                     .padding(.bottom, 10)
                     .padding(.trailing, 40)
                     .frame(maxWidth: .infinity)
@@ -34,7 +36,7 @@ struct LandlordPropertyDetailView: View {
             .background(Color.appBlue)
             .fontWeight(.bold)
             
-            if let property = property {
+            if let property = self.viewModel.selectedProperty {
                 if property.imgUrl != "" {
                     AsyncImage(url: URL(string: property.imgUrl)) { image in
                         image
@@ -115,6 +117,7 @@ struct LandlordPropertyDetailView: View {
                 if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
                     Button {
                         // Edit Property Button
+                        goToEditProfileScreen = true
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -185,9 +188,12 @@ struct LandlordPropertyDetailView: View {
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $goToEditProfileScreen) {
+            LandlordEditPropertyView(viewModel: self.viewModel)
+        }
     }
 }
 
 #Preview {
-    LandlordPropertyDetailView(property: Property(id: "", imgUrl: "", streetAddress: "", city: "", country: "", rent: 0, latitude: 0, longitude: 0, addedByLandlordId: "", address: "", isActivated: true))
+    LandlordPropertyDetailView(viewModel: PropertyViewModel())
 }

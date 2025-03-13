@@ -21,6 +21,8 @@ struct SignupView: View {
     @State private var strAlertMessage: String = ""
     private let arrRoleSelection: [Role] = [.Landlord, .Tenant]
     @Environment(\.presentationMode) var presentationMode
+    @State private var goToLandlordTabView: Bool = false
+
     
     var body: some View {
         
@@ -68,6 +70,9 @@ struct SignupView: View {
             Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
                 print("Alert dismissed!")
             }))
+        }
+        .navigationDestination(isPresented: $goToLandlordTabView) {
+            LandlordTabView()
         }
     }
     
@@ -253,7 +258,7 @@ struct SignupView: View {
                     .padding(.top, 10)
                     .foregroundColor(.appBlue)
 
-                Text("SIGN UP")
+                Text("Sign Up")
                     .padding(.top, 12)
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))
@@ -277,6 +282,7 @@ struct SignupView: View {
                                 self.crearFields()
                                 if user.role == Role.Landlord.rawValue {
                                     // Go to Landlord home
+                                    self.goToLandlordTabView = true
                                 } else {
                                     // Go to Tenant home
                                 }

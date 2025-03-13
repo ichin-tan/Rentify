@@ -17,11 +17,10 @@ struct LandlordMapView: View {
     @State private var strSearch: String = ""
     @State private var showSeeDetailPopup: Bool = false
     @State private var goToPropertyDetail: Bool = false
-    @State private var selectedProperty: Property? = nil
     @Environment(\.presentationMode) var presentationMode
     @State private var showOnlyMyProperties: Bool = false
     
-    @State private var properties: [Property] = []
+    @ObservedObject var viewModel = PropertyViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -75,7 +74,7 @@ struct LandlordMapView: View {
                         ForEach(self.searchedProperties()) { property in
                             Annotation("", coordinate: CLLocationCoordinate2D(latitude: property.latitude, longitude: property.longitude)){
                                 Button(action: {
-                                    selectedProperty = property
+                                    self.viewModel.selectedProperty = property
                                     showSeeDetailPopup = true
                                 }) {
                                     ZStack {
@@ -92,7 +91,7 @@ struct LandlordMapView: View {
                     .padding(1)
                     .mapStyle(.hybrid(elevation: .realistic, pointsOfInterest: .all))
                     
-                    if showSeeDetailPopup, let property = self.selectedProperty {
+                    if showSeeDetailPopup, let property = self.viewModel.selectedProperty {
                         Color.black.opacity(0.7)
                             .cornerRadius(10)
                             .onTapGesture {
@@ -158,7 +157,7 @@ struct LandlordMapView: View {
             Spacer()
         }
         .navigationDestination(isPresented: $goToPropertyDetail) {
-            LandlordPropertyDetailView(property: selectedProperty)
+            LandlordPropertyDetailView(viewModel: self.viewModel)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
@@ -210,7 +209,7 @@ struct LandlordMapView: View {
     
     func searchedProperties() -> [Property] {
         if (showOnlyMyProperties) {
-            let myOnlyProperties = properties.filter({ $0.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase() })
+            let myOnlyProperties = self.viewModel.properties.filter({ $0.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase() })
             if (strSearch.isEmpty) {
                 return myOnlyProperties
             } else {
@@ -218,16 +217,16 @@ struct LandlordMapView: View {
             }
         } else {
             if (strSearch.isEmpty) {
-                return self.properties
+                return self.viewModel.properties
             } else {
-                return self.properties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+                return self.viewModel.properties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
             }
         }
     }
     
     private func fetchProperties() {
         FirebaseManager.shared.fetchProperties { arrProperties in
-            self.properties = arrProperties
+            self.viewModel.properties = arrProperties
         }
     }
 }

@@ -1,14 +1,13 @@
 //
-//  LandlordAddPropertyView.swift
+//  LandlordEditProfileView.swift
 //  Rentify
 //
-//  Created by CP on 11/03/25.
+//  Created by CP on 12/03/25.
 //
 
 import SwiftUI
 
-struct LandlordAddPropertyView: View {
-    
+struct LandlordEditPropertyView: View {
     @State private var strPropertyImage: String = "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
     @State private var strStreetAddress: String = ""
     @State private var strCity: String = ""
@@ -17,17 +16,35 @@ struct LandlordAddPropertyView: View {
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
     private var locManager = LocManager.getInstance()
-
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel: PropertyViewModel
+    
+    init(viewModel: PropertyViewModel) {
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             VStack {
-                Text("Add Property")
-                    .padding(.bottom, 10)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.appBlue)
-                    .font(.system(size: 30))
-                    .foregroundColor(.appAliceBlue)
-                    .fontWeight(.bold)
+                HStack {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left.square.fill")
+                            .font(.system(size: 25))
+                            .padding(.bottom, 5)
+                    }
+                    .padding(.leading, 15)
+                    
+                    Text("Edit Property")
+                        .padding(.bottom, 10)
+                        .padding(.trailing, 40)
+                        .frame(maxWidth: .infinity)
+                        .font(.system(size: 30))
+                }
+                .foregroundColor(.appAliceBlue)
+                .background(Color.appBlue)
+                .fontWeight(.bold)
             }
             
             ScrollView {
@@ -47,7 +64,7 @@ struct LandlordAddPropertyView: View {
                 
                 fetchCurrentLocationButton
                 
-                addPropertyButton
+                editPropertyButton
                 
                 Spacer()
             }
@@ -59,6 +76,14 @@ struct LandlordAddPropertyView: View {
                 print("Alert dismissed!")
             }))
         }
+        .onAppear() {
+            self.strPropertyImage = self.viewModel.selectedProperty?.imgUrl ?? ""
+            self.strStreetAddress = self.viewModel.selectedProperty?.streetAddress ?? ""
+            self.strCity = self.viewModel.selectedProperty?.city ?? ""
+            self.strCountry = self.viewModel.selectedProperty?.country ?? ""
+            self.strRent = String(self.viewModel.selectedProperty?.rent ?? 0)
+        }
+        .navigationBarBackButtonHidden(true)
     }
     
     var propertyImageField: some View {
@@ -181,9 +206,9 @@ struct LandlordAddPropertyView: View {
             .autocapitalization(.none)
     }
     
-    var addPropertyButton: some View {
+    var editPropertyButton: some View {
         Button {
-            self.addProperty()
+            self.editProperty()
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -191,7 +216,7 @@ struct LandlordAddPropertyView: View {
                     .padding([.leading, .trailing], 20)
                     .foregroundColor(.appBlue)
 
-                Text("Add")
+                Text("Edit")
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
@@ -228,7 +253,7 @@ struct LandlordAddPropertyView: View {
                     .padding(.top, 0)
                     .foregroundColor(.appBlue)
 
-                Text("Fill Current Address")
+                Text("FILL CURRENT ADDRESS")
                     .foregroundColor(.appAliceBlue)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
@@ -259,23 +284,24 @@ struct LandlordAddPropertyView: View {
         return isValidate
     }
     
-    private func addProperty() {
+    private func editProperty() {
         if(isValidated()) {
             let address = "\(self.strStreetAddress), \(self.strCity), \(self.strCountry)"
             locManager.getLocationFrom(address: address) { location in
                 if let location = location {
-                    let property = Property(id: UUID().uuidString, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, addedByLandlordId: FirebaseManager.shared.getCurrentUserUIdFromFirebase() ?? "", address: address, isActivated: true)
+                    let property = Property(id: self.viewModel.selectedProperty?.id ?? "", imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, addedByLandlordId: FirebaseManager.shared.getCurrentUserUIdFromFirebase() ?? "", address: address, isActivated: true)
                     FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
                         if(success) {
-                            strAlertMessage = "Property added successfully!"
+                            strAlertMessage = "Property updated successfully!"
+                            self.viewModel.selectedProperty = property
                             isShowAlert = true
                         } else {
-                            strAlertMessage = "Something went wrong while adding property!"
+                            strAlertMessage = "Something went wrong while updating property!"
                             isShowAlert = true
                         }
                     }
                 } else {
-                    strAlertMessage = "Couldn't add property because geocoding didn't work!"
+                    strAlertMessage = "Couldn't update property because geocoding didn't work!"
                     isShowAlert = true
                 }
             }
@@ -284,5 +310,5 @@ struct LandlordAddPropertyView: View {
 }
 
 #Preview {
-    LandlordAddPropertyView()
+    LandlordEditPropertyView(viewModel: PropertyViewModel())
 }
