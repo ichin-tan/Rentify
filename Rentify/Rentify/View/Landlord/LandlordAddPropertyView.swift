@@ -269,6 +269,7 @@ struct LandlordAddPropertyView: View {
                         if(success) {
                             strAlertMessage = "Property added successfully!"
                             isShowAlert = true
+                            crearFields()
                         } else {
                             strAlertMessage = "Something went wrong while adding property!"
                             isShowAlert = true
@@ -280,6 +281,14 @@ struct LandlordAddPropertyView: View {
                 }
             }
         }
+    }
+    
+    private func crearFields() {
+        strPropertyImage = ""
+        strStreetAddress = ""
+        strCity = ""
+        strCountry = ""
+        strRent = ""
     }
 }
 
