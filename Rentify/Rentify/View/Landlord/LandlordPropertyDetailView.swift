@@ -118,8 +118,11 @@ struct LandlordPropertyDetailView: View {
                 .padding(.top, 0)
                 
                 if(property.rentedUserId == "") {
+                    // PROPERTY IS RENTED
                     if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
                         
+                        // VIEW FOR THE LANDLORD WHO OWNS PROPERTY
+
                         if(property.isActivated) {
                             Button {
                                 goToEditPropertyScreen = true
@@ -190,9 +193,71 @@ struct LandlordPropertyDetailView: View {
                         }
                         .padding(.top,5)
                         
+                    } else {
+                        
+                        // VIEW FOR THE LANDLORD WHO DOES NOT OWN PROPERTY
+                        
+                        if let landlord = viewModel.landlord {
+                            VStack {
+                                Text("Landlord Details")
+                                    .font(.system(size: 25))
+                                    .fontWeight(.bold)
+                                    .padding(.top, 10)
+                                
+                                HStack(spacing: 10) {
+                                    Text("Name:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Text(landlord.name)
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 10)
+                                
+                                HStack(spacing: 10) {
+                                    Text("Email:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Text(landlord.email)
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 0)
+
+                                HStack(spacing: 10) {
+                                    Text("Contact:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Button() {
+                                        guard let url = URL(string: "telprompt://\(landlord.contact)") else { return }
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    } label: {
+                                        Text(landlord.contact)
+                                            .foregroundColor(.appBlue)
+                                            .fontWeight(.bold)
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 0)
+                            }
+                            .padding(.top, 0)
+                        }
                     }
                 } else {
+                    
+                    // PROPERTY IS RENTED
+                    
                     if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
+                        
+                        // VIEW FOR THE LANDLORD WHO OWNS PROPERTY
+                        
                         if let tenant = viewModel.tenant {
                             VStack {
                                 Text("Tenant Details")
@@ -245,6 +310,75 @@ struct LandlordPropertyDetailView: View {
                             }
                             .padding(.top, 0)
                         }
+                    } else {
+                        
+                        // VIEW FOR THE LANDLORD WHO DOES NOT OWN PROPERTY
+                        
+                        if let landlord = viewModel.landlord {
+                            VStack {
+                                Text("Landlord Details")
+                                    .font(.system(size: 25))
+                                    .fontWeight(.bold)
+                                    .padding(.top, 10)
+                                
+                                HStack(spacing: 10) {
+                                    Text("Name:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Text(landlord.name)
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 10)
+                                
+                                HStack(spacing: 10) {
+                                    Text("Email:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Text(landlord.email)
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 0)
+
+                                HStack(spacing: 10) {
+                                    Text("Contact:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Button() {
+                                        guard let url = URL(string: "telprompt://\(landlord.contact)") else { return }
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    } label: {
+                                        Text(landlord.contact)
+                                            .foregroundColor(.appBlue)
+                                            .fontWeight(.bold)
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 0)
+                                
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(height: 50)
+                                        .padding([.leading, .trailing], 20)
+                                        .foregroundColor(.appGrayBlue)
+
+                                    Text("Rented")
+                                        .foregroundColor(.appAliceBlue)
+                                        .font(.system(size: 20))
+                                        .fontWeight(.bold)
+                                }
+                            }
+                            .padding(.top, 0)
+                        }
+
                     }
                 }
             }
@@ -253,7 +387,7 @@ struct LandlordPropertyDetailView: View {
         }
         .onAppear() {
             if let property = self.viewModel.selectedProperty {
-                self.viewModel.fetchTenant(userID: property.addedByLandlordId)
+                self.viewModel.fetchLandLord(userID: property.addedByLandlordId)
                 if(property.rentedUserId != "") {
                     self.viewModel.fetchTenant(userID: property.rentedUserId)
                 }
