@@ -247,12 +247,11 @@ struct LoginView: View {
     
     private func login() {
         if(isValidated()) {
-            FirebaseManager.shared.loginWith(email: strEmail, password: strPassword) { result in
+            FirebaseManager.shared.loginWith(email: strEmail, password: strPassword) { result, message in
                 if result {
                     if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
                         FirebaseManager.shared.fetchUser(for: currentUserId) { user in
                             if let user = user {
-//                                saveCurrentUserInUD(user: user)
                                 if(isRememberMe) {
                                     currentUserRememberME = true
                                     currentUserEmail = user.email
@@ -264,11 +263,9 @@ struct LoginView: View {
                                     self.crearFields()
                                 }
                                 if user.role == Role.Landlord.rawValue {
-                                    // Go to Landlord home
                                     print("Landlord logged in")
                                     self.goToLandlordTabView = true
                                 } else {
-                                    // Go to Tenant home
                                     print("Tenant logged in")
                                     self.goToTenantTabView = true
                                 }
@@ -283,7 +280,7 @@ struct LoginView: View {
                         isShowAlert = true
                     }
                 } else {
-                    strAlertMessage = "Something went wrong!"
+                    strAlertMessage = message
                     isShowAlert = true
                 }
             }

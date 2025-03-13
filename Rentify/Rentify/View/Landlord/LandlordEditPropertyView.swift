@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LandlordEditPropertyView: View {
-    @State private var strPropertyImage: String = "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+    @State private var strPropertyImage: String = ""
     @State private var strStreetAddress: String = ""
     @State private var strCity: String = ""
     @State private var strCountry: String = ""

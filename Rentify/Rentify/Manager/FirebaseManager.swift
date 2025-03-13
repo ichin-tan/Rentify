@@ -19,25 +19,25 @@ class FirebaseManager {
     
     //MARK: - GENERAL METHODS
     
-    func signupWith(email: String, password: String, completion: ((Bool) -> ())?) {
+    func signupWith(email: String, password: String, completion: ((Bool, String) -> ())?) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 print(error.localizedDescription)
-                completion?(false)
+                completion?(false, error.localizedDescription)
                 return
             }
-            completion?(true)
+            completion?(true, "")
         }
     }
     
-    func loginWith(email: String, password: String, completion: ((Bool) -> ())?) {
+    func loginWith(email: String, password: String, completion: ((Bool, String) -> ())?) {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 print(error.localizedDescription)
-                completion?(false)
+                completion?(false, error.localizedDescription)
                 return
             }
-            completion?(true)
+            completion?(true, "")
         }
     }
     

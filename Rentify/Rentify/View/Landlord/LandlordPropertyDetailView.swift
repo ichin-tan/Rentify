@@ -161,7 +161,6 @@ struct LandlordPropertyDetailView: View {
                         }
                         
                         Button {
-                            // I could make an alert here but for the sake of time lets just say there is an alert
                             self.viewModel.selectedProperty?.isActivated.toggle()
                             if let property = self.viewModel.selectedProperty {
                                 FirebaseManager.shared.addOrUpdateProperty(property: property) { success in

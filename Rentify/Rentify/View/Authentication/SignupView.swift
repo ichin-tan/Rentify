@@ -273,7 +273,7 @@ struct SignupView: View {
     
     private func signUp() {
         if(isValidated()) {
-            FirebaseManager.shared.signupWith(email: strEmail, password: strPassword) { result in
+            FirebaseManager.shared.signupWith(email: strEmail, password: strPassword) { result, message in
                 if(result) {
                     // have to create user
                     
@@ -311,7 +311,7 @@ struct SignupView: View {
                         isShowAlert = true
                     }
                 } else {
-                    strAlertMessage = "Something went wrong!"
+                    strAlertMessage = message
                     isShowAlert = true
                 }
             }
