@@ -9,8 +9,8 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State private var strEmail: String = "chintan@gmail.com"
-    @State private var strPassword: String = "chintan@123"
+    @State private var strEmail: String = ""
+    @State private var strPassword: String = ""
     @State private var isPasswordVisible: Bool = false
     @FocusState private var isPasswordFocused: Bool
     @State private var isRememberMe: Bool = false
@@ -56,6 +56,14 @@ struct LoginView: View {
                 Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
                     print("Alert dismissed!")
                 }))
+            }
+            .onAppear() {
+                if(currentUserRememberME) {
+                    strEmail = currentUserEmail
+                    strPassword = currentUserPassword
+                    isPasswordVisible = false
+                    isRememberMe = true
+                }
             }
         }
     }
@@ -239,8 +247,17 @@ struct LoginView: View {
                     if let currentUserId = FirebaseManager.shared.getCurrentUserUIdFromFirebase() {
                         FirebaseManager.shared.fetchUser(for: currentUserId) { user in
                             if let user = user {
-                                saveCurrentUserInUD(user: user)
-                                self.crearFields()
+//                                saveCurrentUserInUD(user: user)
+                                if(isRememberMe) {
+                                    currentUserRememberME = true
+                                    currentUserEmail = user.email
+                                    currentUserPassword = strPassword
+                                } else {
+                                    currentUserRememberME = false
+                                    currentUserEmail = ""
+                                    currentUserPassword = ""
+                                    self.crearFields()
+                                }
                                 if user.role == Role.Landlord.rawValue {
                                     // Go to Landlord home
                                     print("Landlord logged in")

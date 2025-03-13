@@ -278,7 +278,7 @@ struct SignupView: View {
                         FirebaseManager.shared.createOrUpdateUser(user: user) { result in
                             if(result) {
                                 print("User created successfully!")
-                                saveCurrentUserInUD(user: user)
+//                                saveCurrentUserInUD(user: user)
                                 self.crearFields()
                                 if user.role == Role.Landlord.rawValue {
                                     // Go to Landlord home
