@@ -117,52 +117,6 @@ struct GuestMapView: View {
                         }
                     }
                 }
-                
-                VStack(spacing: 10) {
-                    Button() {
-                        withAnimation {
-                            let currentSpan = cameraPosition.region?.span ?? MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
-                            let newSpan = MKCoordinateSpan(
-                                latitudeDelta: max(currentSpan.latitudeDelta / 2, 0.01),
-                                longitudeDelta: max(currentSpan.longitudeDelta / 2, 0.01)
-                            )
-                            cameraPosition = .region(MKCoordinateRegion(
-                                center: cameraPosition.region?.center ?? CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16),
-                                span: newSpan
-                            ))
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 20, weight: .bold))
-                            .frame(width: 40, height: 40)
-                            .background(Color.appBlue.opacity(0.9))
-                            .foregroundColor(.appAliceBlue)
-                            .clipShape(Circle())
-                    }
-
-                    Button {
-                        withAnimation {
-                            let currentSpan = cameraPosition.region?.span ?? MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
-                            let newSpan = MKCoordinateSpan(
-                                latitudeDelta: min(currentSpan.latitudeDelta * 2, 180),
-                                longitudeDelta: min(currentSpan.longitudeDelta * 2, 180)
-                            )
-                            cameraPosition = .region(MKCoordinateRegion(
-                                center: cameraPosition.region?.center ?? CLLocationCoordinate2D(latitude: 34.01, longitude: -116.16),
-                                span: newSpan
-                            ))
-                        }
-                    } label: {
-                        Image(systemName: "minus")
-                            .font(.system(size: 20, weight: .bold))
-                            .frame(width: 40, height: 40)
-                            .background(Color.appBlue.opacity(0.9))
-                            .foregroundColor(.appAliceBlue)
-                            .clipShape(Circle())
-                    }
-                }
-                .padding(.trailing, 20)
-                .padding(.bottom, 20)
             }
             .padding([.leading, .trailing], 20)
             .padding(.top, 15)
