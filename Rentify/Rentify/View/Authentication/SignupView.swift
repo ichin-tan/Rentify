@@ -22,6 +22,7 @@ struct SignupView: View {
     private let arrRoleSelection: [Role] = [.Landlord, .Tenant]
     @Environment(\.presentationMode) var presentationMode
     @State private var goToLandlordTabView: Bool = false
+    @State private var goToTenantTabView: Bool = false
 
     
     var body: some View {
@@ -72,6 +73,9 @@ struct SignupView: View {
             }))
         }
         .navigationDestination(isPresented: $goToLandlordTabView) {
+            LandlordTabView()
+        }
+        .navigationDestination(isPresented: $goToTenantTabView) {
             LandlordTabView()
         }
     }
@@ -285,6 +289,7 @@ struct SignupView: View {
                                     self.goToLandlordTabView = true
                                 } else {
                                     // Go to Tenant home
+                                    self.goToTenantTabView = true
                                 }
                             } else {
                                 strAlertMessage = "User could not be created!"

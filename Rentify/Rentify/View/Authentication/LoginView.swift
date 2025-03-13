@@ -20,6 +20,8 @@ struct LoginView: View {
     @State private var strAlertMessage: String = ""
     
     @State private var goToLandlordTabView: Bool = false
+    @State private var goToTenantTabView: Bool = false
+
     
     var body: some View {
         
@@ -194,6 +196,9 @@ struct LoginView: View {
         .navigationDestination(isPresented: $goToLandlordTabView) {
             LandlordTabView()
         }
+        .navigationDestination(isPresented: $goToTenantTabView) {
+            TenantTabView()
+        }
     }
     
     var signupView: some View {
@@ -265,6 +270,7 @@ struct LoginView: View {
                                 } else {
                                     // Go to Tenant home
                                     print("Tenant logged in")
+                                    self.goToTenantTabView = true
                                 }
                             } else {
                                 strAlertMessage = "Something went wrong!"
