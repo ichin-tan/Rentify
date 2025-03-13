@@ -208,8 +208,10 @@ struct LandlordMapView: View {
     }
     
     func searchedProperties() -> [Property] {
+        var localProperties = self.viewModel.properties
+        localProperties = localProperties.filter({ $0.isActivated })
         if (showOnlyMyProperties) {
-            let myOnlyProperties = self.viewModel.properties.filter({ $0.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase() })
+            let myOnlyProperties = localProperties.filter({ $0.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase() })
             if (strSearch.isEmpty) {
                 return myOnlyProperties
             } else {
@@ -217,9 +219,9 @@ struct LandlordMapView: View {
             }
         } else {
             if (strSearch.isEmpty) {
-                return self.viewModel.properties
+                return localProperties
             } else {
-                return self.viewModel.properties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
+                return localProperties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
             }
         }
     }

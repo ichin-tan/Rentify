@@ -13,7 +13,9 @@ struct LandlordPropertyDetailView: View {
     @ObservedObject var viewModel: PropertyViewModel
     
     @State var goToEditProfileScreen = false
-    
+    @State private var isShowAlert: Bool = false
+    @State private var strAlertMessage: String = ""
+
     var body: some View {
         VStack {
             HStack {
@@ -115,43 +117,62 @@ struct LandlordPropertyDetailView: View {
                 .padding(.top, 0)
                 
                 if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
-                    Button {
-                        // Edit Property Button
-                        goToEditProfileScreen = true
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 50)
-                                .padding([.leading, .trailing], 20)
-                                .foregroundColor(.appBlue)
+                    
+                    if(property.isActivated) {
+                        Button {
+                            goToEditProfileScreen = true
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .frame(height: 50)
+                                    .padding([.leading, .trailing], 20)
+                                    .foregroundColor(.appBlue)
 
-                            Text("Edit Property")
-                                .foregroundColor(.appAliceBlue)
-                                .font(.system(size: 20))
-                                .fontWeight(.bold)
+                                Text("Edit Property")
+                                    .foregroundColor(.appAliceBlue)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.bold)
+                            }
                         }
+                        .padding(.top,5)
+                        
+                        Button {
+                            // go to LandlordRequestListView
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .frame(height: 50)
+                                    .padding([.leading, .trailing], 20)
+                                    .foregroundColor(.appBlue)
+
+                                Text("View Requests")
+                                    .foregroundColor(.appAliceBlue)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        .padding(.top,5)
+
                     }
-                    .padding(.top,5)
                     
                     Button {
-                        // go to LandlordRequestListView
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 50)
-                                .padding([.leading, .trailing], 20)
-                                .foregroundColor(.appBlue)
-
-                            Text("View Request")
-                                .foregroundColor(.appAliceBlue)
-                                .font(.system(size: 20))
-                                .fontWeight(.bold)
+                        // I could make an alert here but for the sake of time lets just say there is an alert
+                        self.viewModel.selectedProperty?.isActivated.toggle()
+                        if let property = self.viewModel.selectedProperty {
+                            FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
+                                if (success) {
+                                    strAlertMessage = property.isActivated ? "Property Activated!" : "Property Deactivated"
+                                    isShowAlert = true
+                                } else {
+                                    strAlertMessage = "Something went wrong!"
+                                    isShowAlert = true
+                                }
+                            }
+                        } else {
+                            strAlertMessage = "Coudn't get the current property!"
+                            isShowAlert = true
                         }
-                    }
-                    .padding(.top,5)
-                    
-                    Button {
-                        // Make isActive toggle
+                         
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -167,18 +188,6 @@ struct LandlordPropertyDetailView: View {
                     }
                     .padding(.top,5)
                     
-                } else {
-                    HStack(spacing: 10) {
-                        Text("Rent:")
-                            .foregroundColor(.appGrayBlue)
-                            .fontWeight(.bold)
-                            
-                        Text("$ \(String(format: "%.2f", property.rent))")
-                        
-                        Spacer()
-                    }
-                    .padding([.leading, .trailing], 20)
-                    .padding(.top, 0)
                 }
             }
             
@@ -188,6 +197,11 @@ struct LandlordPropertyDetailView: View {
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+        .alert(isPresented: $isShowAlert) {
+            Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
+                print("Alert dismissed!")
+            }))
+        }
         .navigationDestination(isPresented: $goToEditProfileScreen) {
             LandlordEditPropertyView(viewModel: self.viewModel)
         }
