@@ -19,18 +19,30 @@ struct LandlordMapView: View {
     @State private var goToPropertyDetail: Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var showOnlyMyProperties: Bool = false
-    
+    @State private var goToAllOwnProperty: Bool = false
     @ObservedObject var viewModel = PropertyViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("Properties")
-                .padding(.bottom, 10)
-                .frame(maxWidth: .infinity)
-                .font(.system(size: 30))
-                .foregroundColor(.appAliceBlue)
-                .background(Color.appBlue)
-                .fontWeight(.bold)
+            HStack {
+                Text("Map")
+                    .padding(.bottom, 10)
+                    .padding(.leading, 40)
+                    .frame(maxWidth: .infinity)
+                    .font(.system(size: 30))
+                
+                Button {
+                    goToAllOwnProperty = true
+                } label: {
+                    Image(systemName: "list.bullet")
+                        .font(.system(size: 25))
+                        .padding(.bottom, 5)
+                }
+                .padding(.trailing, 15)
+            }
+            .foregroundColor(.appAliceBlue)
+            .background(Color.appBlue)
+            .fontWeight(.bold)
 
             HStack {
                 TextField("Search", text: $strSearch)
@@ -159,12 +171,15 @@ struct LandlordMapView: View {
         .navigationDestination(isPresented: $goToPropertyDetail) {
             LandlordPropertyDetailView(viewModel: self.viewModel)
         }
+        .navigationDestination(isPresented: $goToAllOwnProperty) {
+            LandlordPropertyListView(viewModel: self.viewModel)
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
         .onAppear() {
-            self.fetchProperties()
+            self.viewModel.fetchProperties()
         }
     }
     
@@ -223,12 +238,6 @@ struct LandlordMapView: View {
             } else {
                 return localProperties.filter({ $0.address.lowercased().contains(strSearch.lowercased()) })
             }
-        }
-    }
-    
-    private func fetchProperties() {
-        FirebaseManager.shared.fetchProperties { arrProperties in
-            self.viewModel.properties = arrProperties
         }
     }
 }
