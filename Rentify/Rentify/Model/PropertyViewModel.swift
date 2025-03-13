@@ -23,6 +23,28 @@ class PropertyViewModel: ObservableObject {
         return self.properties.filter({ $0.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase() })
     }
     
+    func getTenantsWhoRequestedForCurrentProperty(completion: (([User]) -> ())?) {
+        
+        var arrToReturn: [User] = []
+        
+        if let property = self.properties.first(where: { $0.id == selectedProperty?.id ?? "" }) {
+            for (index, requestedTenantId) in property.requestedTenantIds.enumerated() {
+                FirebaseManager.shared.fetchUser(for: requestedTenantId) { user in
+                    if let user = user {
+                        arrToReturn.append(user)
+                        if(index == property.requestedTenantIds.count - 1) {
+                            completion?(arrToReturn)
+                        }
+                    } else {
+                        print("Coudnt find user data for \(requestedTenantId)!")
+                    }
+                }
+            }
+        } else {
+            completion?(arrToReturn)
+        }
+    }
+    
     func fetchLandLord(userID: String) {
         FirebaseManager.shared.fetchUser(for: userID) { landlord in
             self.landlord = landlord

@@ -13,6 +13,7 @@ struct LandlordPropertyDetailView: View {
     @ObservedObject var viewModel: PropertyViewModel
     
     @State var goToEditPropertyScreen = false
+    @State var goToRequestScreen = false
     @State private var isShowAlert: Bool = false
     @State private var strAlertMessage: String = ""
 
@@ -137,7 +138,7 @@ struct LandlordPropertyDetailView: View {
                         .padding(.top,5)
                         
                         Button {
-                            // go to LandlordRequestListView
+                            goToRequestScreen = true
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -204,6 +205,9 @@ struct LandlordPropertyDetailView: View {
         }
         .navigationDestination(isPresented: $goToEditPropertyScreen) {
             LandlordEditPropertyView(viewModel: self.viewModel)
+        }
+        .navigationDestination(isPresented: $goToRequestScreen) {
+            LandlordPropertyRequestListView(viewModel: self.viewModel)
         }
     }
 }
