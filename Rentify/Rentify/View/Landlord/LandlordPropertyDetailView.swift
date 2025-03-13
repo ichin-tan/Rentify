@@ -117,11 +117,64 @@ struct LandlordPropertyDetailView: View {
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 0)
                 
-                if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
-                    
-                    if(property.isActivated) {
+                if(property.rentedUserId == "") {
+                    if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
+                        
+                        if(property.isActivated) {
+                            Button {
+                                goToEditPropertyScreen = true
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(height: 50)
+                                        .padding([.leading, .trailing], 20)
+                                        .foregroundColor(.appBlue)
+
+                                    Text("Edit Property")
+                                        .foregroundColor(.appAliceBlue)
+                                        .font(.system(size: 20))
+                                        .fontWeight(.bold)
+                                }
+                            }
+                            .padding(.top,5)
+                            
+                            Button {
+                                goToRequestScreen = true
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(height: 50)
+                                        .padding([.leading, .trailing], 20)
+                                        .foregroundColor(.appBlue)
+
+                                    Text("View Requests")
+                                        .foregroundColor(.appAliceBlue)
+                                        .font(.system(size: 20))
+                                        .fontWeight(.bold)
+                                }
+                            }
+                            .padding(.top,5)
+
+                        }
+                        
                         Button {
-                            goToEditPropertyScreen = true
+                            // I could make an alert here but for the sake of time lets just say there is an alert
+                            self.viewModel.selectedProperty?.isActivated.toggle()
+                            if let property = self.viewModel.selectedProperty {
+                                FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
+                                    if (success) {
+                                        strAlertMessage = property.isActivated ? "Property Activated!" : "Property Deactivated"
+                                        isShowAlert = true
+                                    } else {
+                                        strAlertMessage = "Something went wrong!"
+                                        isShowAlert = true
+                                    }
+                                }
+                            } else {
+                                strAlertMessage = "Coudn't get the current property!"
+                                isShowAlert = true
+                            }
+                             
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -129,7 +182,7 @@ struct LandlordPropertyDetailView: View {
                                     .padding([.leading, .trailing], 20)
                                     .foregroundColor(.appBlue)
 
-                                Text("Edit Property")
+                                Text(property.isActivated ? "Deactivate" : "Activate")
                                     .foregroundColor(.appAliceBlue)
                                     .font(.system(size: 20))
                                     .fontWeight(.bold)
@@ -137,62 +190,74 @@ struct LandlordPropertyDetailView: View {
                         }
                         .padding(.top,5)
                         
-                        Button {
-                            goToRequestScreen = true
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(height: 50)
-                                    .padding([.leading, .trailing], 20)
-                                    .foregroundColor(.appBlue)
-
-                                Text("View Requests")
-                                    .foregroundColor(.appAliceBlue)
-                                    .font(.system(size: 20))
+                    }
+                } else {
+                    if(property.addedByLandlordId == FirebaseManager.shared.getCurrentUserUIdFromFirebase()) {
+                        if let tenant = viewModel.tenant {
+                            VStack {
+                                Text("Tenant Details")
+                                    .font(.system(size: 25))
                                     .fontWeight(.bold)
-                            }
-                        }
-                        .padding(.top,5)
-
-                    }
-                    
-                    Button {
-                        // I could make an alert here but for the sake of time lets just say there is an alert
-                        self.viewModel.selectedProperty?.isActivated.toggle()
-                        if let property = self.viewModel.selectedProperty {
-                            FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
-                                if (success) {
-                                    strAlertMessage = property.isActivated ? "Property Activated!" : "Property Deactivated"
-                                    isShowAlert = true
-                                } else {
-                                    strAlertMessage = "Something went wrong!"
-                                    isShowAlert = true
+                                    .padding(.top, 10)
+                                
+                                HStack(spacing: 10) {
+                                    Text("Name:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Text(tenant.name)
+                                    
+                                    Spacer()
                                 }
-                            }
-                        } else {
-                            strAlertMessage = "Coudn't get the current property!"
-                            isShowAlert = true
-                        }
-                         
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 50)
                                 .padding([.leading, .trailing], 20)
-                                .foregroundColor(.appBlue)
+                                .padding(.top, 10)
+                                
+                                HStack(spacing: 10) {
+                                    Text("Email:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Text(tenant.email)
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 0)
 
-                            Text(property.isActivated ? "Deactivate" : "Activate")
-                                .foregroundColor(.appAliceBlue)
-                                .font(.system(size: 20))
-                                .fontWeight(.bold)
+                                HStack(spacing: 10) {
+                                    Text("Contact:")
+                                        .foregroundColor(.appGrayBlue)
+                                        .fontWeight(.bold)
+                                        
+                                    Button() {
+                                        guard let url = URL(string: "telprompt://\(tenant.contact)") else { return }
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    } label: {
+                                        Text(tenant.contact)
+                                            .foregroundColor(.appBlue)
+                                            .fontWeight(.bold)
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing], 20)
+                                .padding(.top, 0)
+                            }
+                            .padding(.top, 0)
                         }
                     }
-                    .padding(.top,5)
-                    
                 }
             }
             
             Spacer()
+        }
+        .onAppear() {
+            if let property = self.viewModel.selectedProperty {
+                self.viewModel.fetchTenant(userID: property.addedByLandlordId)
+                if(property.rentedUserId != "") {
+                    self.viewModel.fetchTenant(userID: property.rentedUserId)
+                }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)

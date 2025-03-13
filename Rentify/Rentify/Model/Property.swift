@@ -22,8 +22,9 @@ struct Property: Codable, Identifiable {
     var isActivated: Bool
     var shortListedTenantIds: [String]
     var requestedTenantIds: [String]
-   
-    init(id: String, imgUrl: String, streetAddress: String, city: String, country: String, rent: Double, latitude: Double, longitude: Double, address: String, addedByLandlordId: String, isActivated: Bool, shortListedTenantIds: [String], requestedTenantIds: [String]) {
+    var rentedUserId: String
+
+    init(id: String, imgUrl: String, streetAddress: String, city: String, country: String, rent: Double, latitude: Double, longitude: Double, address: String, addedByLandlordId: String, isActivated: Bool, shortListedTenantIds: [String], requestedTenantIds: [String], rentedUserId: String) {
         self.id = id
         self.imgUrl = imgUrl
         self.streetAddress = streetAddress
@@ -37,5 +38,6 @@ struct Property: Codable, Identifiable {
         self.isActivated = isActivated
         self.shortListedTenantIds = shortListedTenantIds
         self.requestedTenantIds = requestedTenantIds
+        self.rentedUserId = rentedUserId
     }
 }

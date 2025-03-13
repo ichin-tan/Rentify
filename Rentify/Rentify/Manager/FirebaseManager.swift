@@ -106,7 +106,8 @@ class FirebaseManager {
             "address": property.address,
             "isActivated": property.isActivated,
             "shortListedTenantIds": property.shortListedTenantIds,
-            "requestedTenantIds": property.requestedTenantIds
+            "requestedTenantIds": property.requestedTenantIds,
+            "rentedUserId": property.rentedUserId
         ]) { error in
             if let error = error {
                 print(error.localizedDescription)

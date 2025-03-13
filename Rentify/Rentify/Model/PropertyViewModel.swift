@@ -12,6 +12,7 @@ class PropertyViewModel: ObservableObject {
     @Published var properties: [Property] = []
     @Published var selectedProperty: Property? = nil
     @Published var landlord: User?
+    @Published var tenant: User?
     
     func fetchProperties() {
         FirebaseManager.shared.fetchProperties { arrProperties in
@@ -48,6 +49,12 @@ class PropertyViewModel: ObservableObject {
     func fetchLandLord(userID: String) {
         FirebaseManager.shared.fetchUser(for: userID) { landlord in
             self.landlord = landlord
+        }
+    }
+    
+    func fetchTenant(userID: String) {
+        FirebaseManager.shared.fetchUser(for: userID) { tenant in
+            self.tenant = tenant
         }
     }
     
@@ -93,5 +100,15 @@ class PropertyViewModel: ObservableObject {
             }
         }
         return arrToReturn
+    }
+    
+    func rentSelectedPropertyToUser(userId: String, completion: ((Bool) -> ())?) {
+        self.selectedProperty?.rentedUserId = userId
+        if let property = selectedProperty {
+            FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
+                self.fetchProperties()
+                completion?(success)
+            }
+        }
     }
 }

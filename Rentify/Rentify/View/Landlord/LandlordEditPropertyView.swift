@@ -290,7 +290,7 @@ struct LandlordEditPropertyView: View {
             locManager.getLocationFrom(address: address) { location in
                 if let location = location {
                     if let previousProperty = self.viewModel.selectedProperty {
-                        let property = Property(id: previousProperty.id, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, address: address, addedByLandlordId: previousProperty.addedByLandlordId, isActivated: true, shortListedTenantIds: previousProperty.shortListedTenantIds, requestedTenantIds: previousProperty.requestedTenantIds)
+                        let property = Property(id: previousProperty.id, imgUrl: strPropertyImage, streetAddress: strStreetAddress, city: strCity, country: strCountry, rent: Double(strRent) ?? 0.0, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, address: address, addedByLandlordId: previousProperty.addedByLandlordId, isActivated: true, shortListedTenantIds: previousProperty.shortListedTenantIds, requestedTenantIds: previousProperty.requestedTenantIds, rentedUserId: "")
                         
                         FirebaseManager.shared.addOrUpdateProperty(property: property) { success in
                             if(success) {

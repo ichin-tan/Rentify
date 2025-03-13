@@ -308,6 +308,9 @@ struct TenantPropertyDetailView: View {
         .onAppear() {
             if let property = self.viewModel.selectedProperty {
                 self.viewModel.fetchLandLord(userID: property.addedByLandlordId)
+                if(property.rentedUserId != "") {
+                    self.viewModel.fetchTenant(userID: property.rentedUserId)
+                }
             }
         }
         .alert(isPresented: $isShowAlert) {

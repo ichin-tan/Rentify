@@ -11,6 +11,8 @@ struct LandlordPropertyRequestListView: View {
     @ObservedObject var viewModel: PropertyViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var arrRequestedTenants: [User] = []
+    @State private var isShowAlert: Bool = false
+    @State private var strAlertMessage: String = ""
     
     var body: some View {
         
@@ -73,7 +75,15 @@ struct LandlordPropertyRequestListView: View {
                                         .stroke(.appGrayBlue, lineWidth: 1)
                                 }
                                 .onTapGesture {
-                                    print("Accepted")
+                                    self.viewModel.rentSelectedPropertyToUser(userId: user.id) { success in
+                                        if(success) {
+                                            strAlertMessage = "Rented to \(user.name)"
+                                            isShowAlert = true
+                                        } else {
+                                            strAlertMessage = "Something went wrong"
+                                            isShowAlert = true
+                                        }
+                                    }
                                 }
                             
                             Text("Reject")
@@ -111,6 +121,14 @@ struct LandlordPropertyRequestListView: View {
             self.viewModel.getTenantsWhoRequestedForCurrentProperty { users in
                 self.arrRequestedTenants = users
             }
+        }
+        .alert(isPresented: $isShowAlert) {
+            Alert(title: Text("Rentify"), message: Text("\(self.strAlertMessage)"),dismissButton: .default(Text("OK"), action: {
+                if(strAlertMessage.hasPrefix("Rented to")) {
+                    presentationMode.wrappedValue.dismiss()
+                }
+                print("Alert dismissed!")
+            }))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appColumbiaBlue)
